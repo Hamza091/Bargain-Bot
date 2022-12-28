@@ -1,0 +1,133 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - hey there
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: product_query
+  examples: |
+    - Do you have [apples](product)?
+    - Do you have [apples](product), [banannas](product) and [mangoes](product)?
+    - I want [apples](product), [oranges](product) and [mangoes](product)
+    - I want [milk](product) and some [tomatoes](product)
+    - Do you sell [oranges](product) and [mangoes](product)?
+    - What is price of [apples](product)?
+    - Tell me price of [5kg](quantity) [mangoes](product)
+    - How much for [6](quantity) kg of [oranges](product)
+    - I want [5](quantity) kg of [apples](product)
+    - How much for [10](quantity) of [oranges](product)?
+    - Do you have [2kg](quantity) [potatoes](product)?
+    - [peaches](product)
+    - [lemons](product)
+    - [grapes](product)
+    - [carrot](product)
+    - [onions](product)
+    - [0kg](quantity)
+    - [1kg](quantity)
+    - [2kg](quantity)
+    - [3kg](quantity)
+    - [4kg](quantity)
+    - [5kg](quantity)
+    - [6kg](quantity)
+    - [7kg](quantity)
+    - [8kg](quantity)
+    - [9kg](quantity)
+    - [0](quantity)
+    - [1](quantity)
+    - [2](quantity)
+    - [3](quantity)
+    - [4](quantity)
+    - [5](quantity)
+    - [6](quantity)
+    - [7](quantity)
+    - [8](quantity)
+    - [9](quantity)
+    
+
+    
+
+    
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+

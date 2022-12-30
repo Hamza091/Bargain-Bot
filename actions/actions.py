@@ -38,6 +38,7 @@ class ActionProductQuery(Action):
         # extract all product names and their quantities
         products = []
         entities = tracker.latest_message['entities']
+        
         quantity="1"
         product=""
         for entity in entities:    
@@ -61,6 +62,31 @@ class ActionProductQuery(Action):
             "potatoes":{"price":400,"qty":300},
             "apples":{"price":300,"qty":100},
             "banannas":{"price":100,"qty":200},
+            "grapes":{"price":100,"qty":200},
+            "onions":{"price":200,"qty":100},
+            "chicken":{"price":200,"qty":100},
+            "butter":{"price":200,"qty":100},
+            "yogurt":{"price":400,"qty":100},
+            "brown bread":{"price":300,"qty":100},
+            "flour":{"price":200,"qty":100},
+            "sugar":{"price":200,"qty":100},
+            "coffee":{"price":200,"qty":100},
+            "beef":{"price":300,"qty":100},
+            "beries":{"price":200,"qty":100},
+            "fish":{"price":200,"qty":100},
+            "pasta":{"price":200,"qty":100},
+            "sausage":{"price":100,"qty":100},
+            "dessert":{"price":200,"qty":100},
+            "cream cheese":{"price":200,"qty":100},
+            "eggs":{"price":200,"qty":100},
+            "salt":{"price":400,"qty":100},
+            "oil":{"price":200,"qty":100},
+            "water":{"price":200,"qty":100},
+            "coffee":{"price":200,"qty":100},
+            "cabbage":{"price":300,"qty":100},
+            "mushroom":{"price":200,"qty":100},
+            "broccoli":{"price":700,"qty":100},
+            "peas":{"price":800,"qty":100}
         }
 
         available = []
@@ -96,8 +122,9 @@ class ActionProductQuery(Action):
                 response+="The prices are "
                 for product in available:
                     response+=str(product[1])
-                    response+=","        
-                response+=" respectively. "
+                    if(product!=available[len(available)-1]):
+                        response+=","        
+                response+=". "
             else:
                 verb=""
                 if response[-1]=="s":
@@ -131,6 +158,9 @@ class ActionProductQuery(Action):
                 response+="not available."
 
 
+        # if response is empty then there are no entities or spellings are wrong
+        if(len(response)==0):
+            response = "These products are not available. Please make sure spellings are correct."
 
         dispatcher.utter_message(text=response)
 

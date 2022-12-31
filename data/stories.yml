@@ -6,6 +6,10 @@ stories:
   steps:
   - intent: product_query
   - action: action_product_query
+  - intent: place_order
+  - action: action_place_order
+  - intent: affirm
+  - action: action_confirm_order
   
 - story: happy path
   steps:
@@ -21,8 +25,8 @@ stories:
   - intent: mood_unhappy
   - action: utter_cheer_up
   - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
+  # - intent: affirm
+  # - action: utter_happy
 
 - story: sad path 2
   steps:

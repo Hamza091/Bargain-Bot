@@ -3,23 +3,29 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - affirm
-  - deny
   - mood_great
   - mood_unhappy
   - bot_challenge
   - product_query
+  - place_order
+  - affirm
+  - deny
 
 entities:
   - product
   - quantity
 
-# slots:
-#   product:
-#     type: list
-#     mappings:
-#     - type: from_entity
-#       entity: product
+slots:
+  product:
+    type: list
+    mappings:
+    - type: from_entity
+      entity: product
+  requested_products:
+    type: list
+    mappings:
+    - type: custom
+      actions: action_product_query
 
 responses:
   utter_greet:
@@ -43,6 +49,8 @@ responses:
 
 actions:
   - action_product_query
+  - action_place_order
+  - action_confirm_order
 
 session_config:
   session_expiration_time: 60

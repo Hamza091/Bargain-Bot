@@ -11,6 +11,7 @@ from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import SlotSet
 import re
 #
 #
@@ -26,6 +27,7 @@ import re
 #         dispatcher.utter_message(text="Hello World!")
 #
 #         return []
+
 class ActionProductQuery(Action):
 
     def name(self) -> Text:
@@ -99,7 +101,7 @@ class ActionProductQuery(Action):
                     # product is available with required quantity
                     # calculate total price and append in available array
                     totalPrice = estoreProducts[name]["price"]*qty
-                    available.append([name,totalPrice])
+                    available.append([name,totalPrice,qty])
             else:
                 # product is not available
                 unavailable.append(name)
@@ -109,6 +111,7 @@ class ActionProductQuery(Action):
         # print(unavailable)
         #response for available product
         response=""
+        
 
         if len(available)>0:
             
@@ -163,5 +166,99 @@ class ActionProductQuery(Action):
             response = "These products are not available. Please make sure spellings are correct."
 
         dispatcher.utter_message(text=response)
+
+        # SlotSet is used to hold information of available product 
+        # if user asks to place order after this action then
+        # this information can be used to place order
+
+        return [SlotSet("requested_products", available)]
+
+class ActionPlaceOrder(Action):
+
+    def name(self) -> Text:
+        return "action_place_order"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        # fetch all the products that user asked in previous actoin
+        products = tracker.get_slot("requested_products")
+        
+        # fetch entities from current message
+        entities = tracker.latest_message['entities']
+        
+        # if user doesn't specified any products throughout the conversation and asks to place order
+        if len(products)==0 and len(entities)==0:
+            dispatcher.utter_message(text="Please specify products that you want to purchase.")
+            return []
+
+        # filter products if user selected some products from requested products in current message
+        response = ""
+        if len(products)>0 and len(entities)>0:
+            filteredProducts =[]
+            totalPrice = 0
+            reqProducts = []
+            for entity in entities:    
+                if entity['entity']=='product':
+                    reqProducts.append(entity['value'])
+            
+            response="Your requested products are "
+            for product in products: #product[0]:name product[1]:price product[2]:quantity
+                if product[0] in reqProducts:
+                    response+=str(product[2])
+                    response+="kg "
+                    response+=product[0]
+                    if product[0]!=products[len(products)-1][0]:
+                        response+=", "
+                    else:
+                        response+=". "
+                    totalPrice+=product[1]
+                    filteredProducts.append(product)       
+
+            response+="The total price is: "
+            response+=str(totalPrice)
+            response+=". Should I place your order?"
+        
+        else:
+            # if user ask to place order for all requested products
+            totalPrice=0
+            response="Your requested items are "
+            for product in products: #product[0]:name product[1]:price product[2]:quantity
+                response+=str(product[2])
+                response+="kg "
+                response+=product[0]
+                if product[0]!=products[len(products)-1][0]:
+                    response+=", "
+                else:
+                    response+=". "
+                totalPrice+=product[1]       
+
+            response+="The total price is: "
+            response+=str(totalPrice)
+            response+=". Should I place your order?"
+
+        # for entity in entities:
+        #     print(entity)
+
+        # for item in tracker.slots:
+        #     print(item)
+        # products = tracker.slots["product"]
+        
+        # print(products)
+        dispatcher.utter_message(text=response)
+
+        return []
+
+class ActionConfirmOrder(Action):
+
+    def name(self) -> Text:
+        return "action_confirm_order"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        dispatcher.utter_message(text="Your order has been placed!")
 
         return []

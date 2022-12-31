@@ -27,13 +27,25 @@ nlu:
     - bye bye
     - see you later
 
+- intent: place_order
+  examples: |
+    - Okay place my order
+    - Place order for [apples](product), [banannas](product) and [mangoes](product)
+    - Place my order for all items
+    - Place order only for [5kg](quantity) [mangoes](product)
+    - Place my order only [15kg](quantity) [tomatoes](product) and [2kg](quantity) [potatoes](product)
+    - Just place order for [5kg](quantity) [apples](product) and [10kg](quantity) [mangoes](product)
+    - Just place order for [lemons](product) and [grapes](product) only
+    - Only place order for [butter](product), [sugar](product) and [fish](product) 
+
+
 - intent: product_query
   examples: |
     - Do you have [apples](product)?
     - Do you have [apples](product), [banannas](product) and [mangoes](product)?
-    - I want [apples](product), [oranges](product) and [mangoes](product)
+    - Hi I want [apples](product), [oranges](product) and [mangoes](product)
     - I want [milk](product) and some [tomatoes](product)
-    - I want to buy [potatoes](product)
+    - Hi I want to buy [potatoes](product)
     - Do you sell [oranges](product) and [mangoes](product)?
     - What is price of [apples](product)?
     - Tell me price of [5kg](quantity) [mangoes](product)
@@ -106,17 +118,14 @@ nlu:
     - [strawberries](product)
     - [watermelon](product)
 
-    
-
-    
-
-    
-
 - intent: affirm
   examples: |
     - yes
     - y
+    - sure
+    - go ahead
     - indeed
+    - yep
     - of course
     - that sounds good
     - correct
@@ -125,6 +134,7 @@ nlu:
   examples: |
     - no
     - n
+    - nope
     - never
     - I don't think so
     - don't like that
@@ -136,6 +146,7 @@ nlu:
     - perfect
     - great
     - amazing
+    - thanks
     - feeling like a king
     - wonderful
     - I am feeling very good

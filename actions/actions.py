@@ -263,7 +263,12 @@ class ActionConfirmOrder(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
+
         data = tracker.get_slot("requested_products")
+        if len(data)==0:
+            dispatcher.utter_message(text="Great! carry on")
+            return []
+
         obj = {"data":data}
         print(obj)
         status = requests.post("http://127.0.0.1:5000/postOrder",json=obj)

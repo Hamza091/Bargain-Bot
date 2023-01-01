@@ -164,15 +164,22 @@ class ActionProductQuery(Action):
 
         # if response is empty then there are no entities or spellings are wrong
         if(len(response)==0):
-            response = "These products are not available. Please make sure spellings are correct."
+            response = "Please specify products that you want to buy. Make sure spellings are correct."
 
         dispatcher.utter_message(text=response)
 
         # SlotSet is used to hold information of available product 
         # if user asks to place order after this action then
         # this information can be used to place order
+        previousProducts = tracker.get_slot("requested_products")
+        print(previousProducts)
+        if previousProducts:
+            if len(previousProducts)>0:
+                for p in previousProducts:
+                    available.append(p)
 
         return [SlotSet("requested_products", available)]
+        
 
 class ActionPlaceOrder(Action):
 

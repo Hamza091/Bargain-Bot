@@ -190,14 +190,20 @@ class ActionPlaceOrder(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        products = [] 
+        entities = []
+
         # fetch all the products that user asked in previous actoin
-        products = tracker.get_slot("requested_products")
+        # checks are used to handle "none" cases
+        if tracker.get_slot("requested_products"):
+            products = tracker.get_slot("requested_products")
         
         # fetch entities from current message
-        entities = tracker.latest_message['entities']
+        if tracker.latest_message['entities']:
+            entities = tracker.latest_message['entities']
         
         # if user doesn't specified any products throughout the conversation and asks to place order
-        if len(products)==0 and len(entities)==0:
+        if  (len(products)==0 and len(entities)==0):
             dispatcher.utter_message(text="Please specify products that you want to purchase.")
             return []
 
@@ -272,14 +278,13 @@ class ActionConfirmOrder(Action):
         
 
         data = tracker.get_slot("requested_products")
-        if len(data)==0:
+            
+        if data:
+            obj = {"data":data}
+            print(obj)
+            status = requests.post("http://127.0.0.1:5000/postOrder",json=obj)
+            print(status)
+            dispatcher.utter_message(text="Your order has been placed!")
+        else:
             dispatcher.utter_message(text="Great! carry on")
-            return []
-
-        obj = {"data":data}
-        print(obj)
-        status = requests.post("http://127.0.0.1:5000/postOrder",json=obj)
-        print(status)
-        dispatcher.utter_message(text="Your order has been placed!")
-
         return []

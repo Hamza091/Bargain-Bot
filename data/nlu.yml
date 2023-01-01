@@ -30,6 +30,11 @@ nlu:
 - intent: place_order
   examples: |
     - Okay place my order
+    - What's in my cart
+    - Show me products of my cart
+    - How many products are in my cart
+    - Give me details of products in my cart
+    - Can you show me details of product in my cart?
     - please place my order
     - Place order for [apples](product), [banannas](product) and [mangoes](product)
     - Place my order for all items
@@ -53,6 +58,10 @@ nlu:
     - Hi I want [apples](product), [oranges](product) and [mangoes](product)
     - I want [milk](product) and some [tomatoes](product)
     - Hi I want to buy [potatoes](product)
+    - I want to purchase [mangoes](product)
+    - Add [apples](product) in my cart
+    - Please add [mangoes](product) and [grapes](product) in my cart
+    - Include [cabbages](product) in my cart
     - Do you sell [oranges](product) and [mangoes](product)?
     - What is price of [apples](product)?
     - Tell me price of [5kg](quantity) [mangoes](product)

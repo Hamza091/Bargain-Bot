@@ -27,12 +27,32 @@ nlu:
     - bye bye
     - see you later
 
+- intent: place_order
+  examples: |
+    - Okay place my order
+    - please place my order
+    - Place order for [apples](product), [banannas](product) and [mangoes](product)
+    - Place my order for all items
+    - Place order only for [5kg](quantity) [mangoes](product)
+    - Place my order only [15kg](quantity) [tomatoes](product) and [2kg](quantity) [potatoes](product)
+    - Just place order for [5kg](quantity) [apples](product) and [10kg](quantity) [mangoes](product)
+    - Just place order for [lemons](product) and [grapes](product) only
+    - Only place order for [butter](product), [sugar](product) and [fish](product) 
+
+- intent: list_items
+  examples: |
+    - What do you sell?
+    - What items do you have?
+    - What you sell?
+    - Tell me what you sell?
+    
 - intent: product_query
   examples: |
     - Do you have [apples](product)?
     - Do you have [apples](product), [banannas](product) and [mangoes](product)?
-    - I want [apples](product), [oranges](product) and [mangoes](product)
+    - Hi I want [apples](product), [oranges](product) and [mangoes](product)
     - I want [milk](product) and some [tomatoes](product)
+    - Hi I want to buy [potatoes](product)
     - Do you sell [oranges](product) and [mangoes](product)?
     - What is price of [apples](product)?
     - Tell me price of [5kg](quantity) [mangoes](product)
@@ -41,6 +61,7 @@ nlu:
     - How much for [10](quantity) of [oranges](product)?
     - Do you have [2kg](quantity) [potatoes](product)?
     - [peaches](product)
+    - [blue band](product)
     - [lemons](product)
     - [grapes](product)
     - [carrot](product)
@@ -55,27 +76,63 @@ nlu:
     - [7kg](quantity)
     - [8kg](quantity)
     - [9kg](quantity)
-    - [0](quantity)
-    - [1](quantity)
-    - [2](quantity)
-    - [3](quantity)
-    - [4](quantity)
-    - [5](quantity)
-    - [6](quantity)
-    - [7](quantity)
-    - [8](quantity)
-    - [9](quantity)
-    
-
-    
-
-    
+    - [0123456789](quantity)
+    - [chicken](product)
+    - [butter](product)
+    - [yogurt](product)
+    - [brown bread](product)
+    - [flour](product)
+    - [sugar](product)
+    - [coffee](product)
+    - [beef](product)
+    - [beries](product)
+    - [fish](product)
+    - [pasta](product)
+    - [sausage](product)
+    - [dessert](product)
+    - [cream cheese](product)
+    - [eggs](product)
+    - [salt](product)
+    - [oil](product)
+    - [water](product)
+    - [coffee](product)
+    - [cabbage](product)
+    - [mushroom](product)
+    - [pumpkin](product)
+    - [broccoli](product)
+    - [peas](product)
+    - [brinjal](product)
+    - [capsicum](product)
+    - [caulifower](product)
+    - [garlic](product)
+    - [beetroot](product)
+    - [corn](product)
+    - [beans](product)
+    - [lettuce](product)
+    - [coriander leaves](product)
+    - [mint](product)
+    - [spring onion](product)
+    - [mustard greens](product)
+    - [avacados](product)
+    - [cherry](product)
+    - [coconut](product)
+    - [hazelnut](product)
+    - [guava](product)
+    - [kiwi](product)
+    - [papaya](product)
+    - [pomegranate](product)
+    - [pineapple](product)
+    - [strawberries](product)
+    - [watermelon](product)
 
 - intent: affirm
   examples: |
     - yes
     - y
+    - sure
+    - go ahead
     - indeed
+    - yep
     - of course
     - that sounds good
     - correct
@@ -84,6 +141,7 @@ nlu:
   examples: |
     - no
     - n
+    - nope
     - never
     - I don't think so
     - don't like that
@@ -95,6 +153,7 @@ nlu:
     - perfect
     - great
     - amazing
+    - thanks
     - feeling like a king
     - wonderful
     - I am feeling very good

@@ -3,23 +3,30 @@ version: "3.1"
 intents:
   - greet
   - goodbye
-  - affirm
-  - deny
   - mood_great
   - mood_unhappy
   - bot_challenge
   - product_query
+  - list_items
+  - place_order
+  - affirm
+  - deny
 
 entities:
   - product
   - quantity
 
-# slots:
-#   product:
-#     type: list
-#     mappings:
-#     - type: from_entity
-#       entity: product
+slots:
+  product:
+    type: list
+    mappings:
+    - type: from_entity
+      entity: product
+  requested_products:
+    type: list
+    mappings:
+    - type: custom
+      actions: action_product_query
 
 responses:
   utter_greet:
@@ -40,9 +47,14 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+  
+  utter_list_items:
+  - text: "We sell all the grocery items. What do you want to buy?"
 
 actions:
   - action_product_query
+  - action_place_order
+  - action_confirm_order
 
 session_config:
   session_expiration_time: 60

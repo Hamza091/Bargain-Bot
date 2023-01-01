@@ -7,6 +7,7 @@ intents:
   - mood_unhappy
   - bot_challenge
   - product_query
+  - list_items
   - place_order
   - affirm
   - deny
@@ -46,6 +47,9 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+  
+  utter_list_items:
+  - text: "We sell all the grocery items. What do you want to buy?"
 
 actions:
   - action_product_query

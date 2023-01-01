@@ -13,6 +13,7 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 import re
+import requests
 #
 #
 # class ActionHelloWorld(Action):
@@ -220,7 +221,7 @@ class ActionPlaceOrder(Action):
             response+=str(totalPrice)
             response+=". Should I place your order?"
         
-        else:
+        elif len(products)>0:
             # if user ask to place order for all requested products
             totalPrice=0
             response="Your requested items are "
@@ -237,6 +238,9 @@ class ActionPlaceOrder(Action):
             response+="The total price is: "
             response+=str(totalPrice)
             response+=". Should I place your order?"
+        
+        else:
+            response="Please specify products that you want to purchase."
 
         # for entity in entities:
         #     print(entity)
@@ -258,7 +262,12 @@ class ActionConfirmOrder(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        
+        data = tracker.get_slot("requested_products")
+        obj = {"data":data}
+        print(obj)
+        status = requests.post("http://127.0.0.1:5000/postOrder",json=obj)
+        print(status)
         dispatcher.utter_message(text="Your order has been placed!")
 
         return []

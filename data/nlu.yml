@@ -30,6 +30,7 @@ nlu:
 - intent: place_order
   examples: |
     - Okay place my order
+    - please place my order
     - Place order for [apples](product), [banannas](product) and [mangoes](product)
     - Place my order for all items
     - Place order only for [5kg](quantity) [mangoes](product)
@@ -38,7 +39,13 @@ nlu:
     - Just place order for [lemons](product) and [grapes](product) only
     - Only place order for [butter](product), [sugar](product) and [fish](product) 
 
-
+- intent: list_items
+  examples: |
+    - What do you sell?
+    - What items do you have?
+    - What you sell?
+    - Tell me what you sell?
+    
 - intent: product_query
   examples: |
     - Do you have [apples](product)?

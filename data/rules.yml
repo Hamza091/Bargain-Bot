@@ -12,6 +12,11 @@ rules:
   - intent: bot_challenge
   - action: utter_iamabot
 
+- rule: When user asks to mention all items
+  steps:
+  - intent: list_items
+  - action: utter_list_items
+
 - rule: check product info when user asks
   steps:
   - intent: product_query

@@ -4,7 +4,7 @@ stories:
 
 - story: product query path
   steps:
-  
+
   - intent: list_items
   - action: utter_list_items
   - intent: product_query

@@ -168,15 +168,24 @@ class ActionProductQuery(Action):
 
         dispatcher.utter_message(text=response)
 
-        # SlotSet is used to hold information of available product 
-        # if user asks to place order after this action then
-        # this information can be used to place order
-        previousProducts = tracker.get_slot("requested_products")
-        print(previousProducts)
-        if previousProducts:
-            if len(previousProducts)>0:
-                for p in previousProducts:
-                    available.append(p)
+        # SlotSet is used to hold information. In this case requested_products
+        # hold updated information of cart(i.e what products user selected so far) 
+        # if user asks to place order then this slot can be used to place order
+        cart = tracker.get_slot("requested_products")
+        print(cart)
+        # updating cart items
+        if cart:
+            if len(cart)>0:
+                for p in cart:
+                    f=1
+                    # checking for duplicate values, only appending old cart items that are not
+                    # in current requested items
+                    for i in range(len(available)):
+                        if p[0] == available[i][0]:
+                            f=0
+                            break
+                    if(f):
+                        available.append(p)
 
         return [SlotSet("requested_products", available)]
         
@@ -233,6 +242,9 @@ class ActionPlaceOrder(Action):
             response+="The total price is: "
             response+=str(totalPrice)
             response+=". Should I place your order?"
+
+            dispatcher.utter_message(text=response)
+            return [SlotSet("requested_products", filteredProducts)]
         
         elif len(products)>0:
             # if user ask to place order for all requested products

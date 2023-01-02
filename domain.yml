@@ -41,6 +41,7 @@ responses:
 
   utter_happy:
   - text: "Great, carry on!"
+  - text: "Carry on"
 
   utter_goodbye:
   - text: "Bye"

@@ -35,6 +35,7 @@ nlu:
     - How many products are in my cart
     - Give me details of products in my cart
     - Can you show me details of product in my cart?
+    - What's my bill?
     - please place my order
     - Place order for [apples](product), [banannas](product) and [mangoes](product)
     - Place my order for all items
@@ -67,7 +68,7 @@ nlu:
     - Tell me price of [5kg](quantity) [mangoes](product)
     - How much for [6](quantity) kg of [oranges](product)
     - I want [5](quantity) kg of [apples](product)
-    - How much for [10](quantity) of [oranges](product)?
+    - How much for [10kg](quantity) of [oranges](product)?
     - Do you have [2kg](quantity) [potatoes](product)?
     - [peaches](product)
     - [blue band](product)
@@ -138,6 +139,7 @@ nlu:
   examples: |
     - yes
     - y
+    - yes you can
     - sure
     - go ahead
     - indeed

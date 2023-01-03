@@ -8,11 +8,22 @@ stories:
   - action: utter_list_items
   - intent: product_query
   - action: action_product_query
+
+
+- story: place order
+  steps:
   - intent: place_order
   - action: action_place_order
   - intent: affirm
   - action: action_confirm_order
-  
+
+- story: Don't place order
+  steps:
+  - intent: place_order
+  - action: action_place_order
+  - intent: deny
+  - action: utter_happy
+
 - story: happy path
   steps:
   - intent: greet

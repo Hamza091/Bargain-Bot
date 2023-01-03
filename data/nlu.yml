@@ -159,12 +159,18 @@ nlu:
     - no way
     - not really
 
+- intent: thanks
+  examples: |
+    - Thank you
+    - thanks
+    - many thanks
+    - thank you
+
 - intent: mood_great
   examples: |
     - perfect
     - great
     - amazing
-    - thanks
     - feeling like a king
     - wonderful
     - I am feeling very good
@@ -193,6 +199,13 @@ nlu:
     - extremly sad
     - so saad
     - so sad
+
+- intent: how_are_you
+  examples: |
+    - How are you?
+    - I am fine. How are you?
+    - I am good. How about you?
+    
 
 - intent: bot_challenge
   examples: |

@@ -7,6 +7,16 @@ rules:
   - intent: goodbye
   - action: utter_goodbye
 
+- rule: Say 'your welcome' anytime user says 'thank you'
+  steps:
+  - intent: thanks
+  - action: utter_welcome
+
+- rule: Say 'I am fine'
+  steps:
+  - intent: how_are_you
+  - action: utter_fine
+
 # - rule: Say 'I am a bot' anytime the user challenges
 #   steps:
 #   - intent: bot_challenge

@@ -46,6 +46,13 @@ responses:
   utter_goodbye:
   - text: "Bye"
 
+  utter_fine:
+  - text: "I am fine."
+
+  utter_welcome:
+  - text: "My pleasure."
+  - text: "Your welcome"
+
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
   

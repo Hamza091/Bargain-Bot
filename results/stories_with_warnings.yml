@@ -1,0 +1,17 @@
+version: "3.1"
+stories:
+- story: product query (dont place order) (.\tests\test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: product_query
+    entities:
+    - product: potatoes
+    - product: tomatoes
+  - slot_was_set:
+    - product:
+      - potatoes
+      - tomatoes
+  - action: action_product_query  # predicted: action_unlikely_intent
+  - intent: deny
+  - action: utter_happy  # predicted: action_unlikely_intent

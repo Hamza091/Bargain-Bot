@@ -51,7 +51,29 @@ nlu:
     - What items do you have?
     - What you sell?
     - Tell me what you sell?
+
+
+# - intent: want_discount
+#   examples: |
+#     - That's too much
+#     - Price too high
+#     - I don't have enough budget
+#     - Please make some discount
+#     - Make it lower
+#     - I want more discount
+
+# - intent: negotiate_overall
+#   examples: |
+#     - My budget is only [500](quantity)
+  
     
+
+# - intent: negotiate_specific
+#   examples: |
+#     - That's too much for [tomatoes](product). Make it [230](quantity) only
+#     - Please make some discount for [potatoes](product)
+  
+
 - intent: product_query
   examples: |
     - Do you have [apples](product)?

@@ -1,0 +1,61 @@
+version: "3.1"
+nlu:
+- intent: how_are_you
+  examples: |
+    - I am fine. How are you?
+- intent: list_items
+  examples: |
+    - What do you sell?
+- intent: thanks
+  examples: |
+    - thanks
+- intent: bot_challenge
+  examples: |
+    - are you a human?
+- intent: deny
+  examples: |
+    - not really
+- intent: greet
+  examples: |
+    - hey there
+    - goodevening
+- intent: goodbye
+  examples: |
+    - see you later
+    - good night
+- intent: affirm
+  examples: |
+    - yes
+    - that sounds good
+- intent: mood_great
+  examples: |
+    - so perfect
+    - great
+    - so so perfect
+- intent: mood_unhappy
+  examples: |
+    - not good
+    - I am sad
+    - not very good
+- intent: place_order
+  examples: |
+    - How many products are in my cart
+    - please place my order
+    - Okay place my order
+- intent: product_query
+  examples: |
+    - [8kg](quantity)
+    - [brinjal](product)
+    - [lettuce](product)
+    - [brown bread](product)
+    - Do you have [2kg](quantity) [potatoes](product)?
+    - [fish](product)
+    - Hi I want [apples](product), [oranges](product) and [mangoes](product)
+    - [0kg](quantity)
+    - [carrot](product)
+    - [corn](product)
+    - [peas](product)
+    - [mustard greens](product)
+    - [onions](product)
+    - [4kg](quantity)
+    - [beries](product)

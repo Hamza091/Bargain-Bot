@@ -60,6 +60,74 @@ stories:
     intent: deny
   - action: utter_goodbye
 
+- story: product query (dont place order)
+  steps:
+  - user: |
+      hello
+    intent: greet
+  - action: utter_greet
+  - user: |
+      I want to buy [potatoes]{"entity":"product"} and [tomatoes]{"entity":"product"} 
+    intent: product_query
+  - action: action_product_query
+  - user: |
+      I don't wanna to buy 
+    intent: deny
+  - action: utter_happy
+
+- story: place order(1)
+  steps:
+  - user: |
+      hello
+    intent: greet
+  - action: utter_greet
+  - user: |
+      I want to buy [potatoes]{"entity":"product"} and [tomatoes]{"entity":"product"}, some [onions]{"entity":"product"}  
+    intent: product_query
+  - action: action_product_query
+  - user: |
+      okay you can place my order
+    intent: affirm
+  - action: action_confirm_order
+
+- story: place order(2)
+  steps:
+  - user: |
+      hello
+    intent: greet
+  - action: utter_greet
+  - user: |
+      I wanna purchase some Items. Do you sell [potatoes]{"entity":"product"} and [tomatoes]{"entity":"product"}, some [mangoes]{"entity":"product"}  
+    intent: product_query
+  - action: action_product_query
+  - user: |
+      Looks good. Please place my order
+    intent: affirm
+  - action: action_confirm_order
+
+- story: place order(3)
+  steps:
+  - user: |
+      hey
+    intent: greet
+  - action: utter_greet
+  - user: |
+      I wanna purchase some Items. Do you sell [potatoes]{"entity":"product"} and [tomatoes]{"entity":"product"}, some [mangoes]{"entity":"product"}  
+    intent: product_query
+  - action: action_product_query
+  - user: |
+      I wanna buy some [fruits]{"entity":"product"} and [vegetables]{"entity":"product"}   
+    intent: product_query
+  - action: action_product_query
+  - user: |
+      Can you place my order
+    intent: place_order
+  - action: action_place_order
+  - user: |
+      yes. It looks good
+    intent: affirm
+  - action: action_confirm_order
+
 - story: sad path 3
   steps:
   - user: |

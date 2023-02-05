@@ -45,6 +45,41 @@ def postOrder():
 
     return jsonify({"success":1})
     
+@app.route('/products')
+def getProducts():
+    
+
+    return jsonify({
+            "tomatoes":{"price":500,"qty":400},
+            "potatoes":{"price":400,"qty":300},
+            "apples":{"price":300,"qty":100},
+            "banannas":{"price":100,"qty":200},
+            "grapes":{"price":100,"qty":200},
+            "onions":{"price":200,"qty":100},
+            "chicken":{"price":200,"qty":100},
+            "butter":{"price":200,"qty":100},
+            "yogurt":{"price":400,"qty":100},
+            "brown bread":{"price":300,"qty":100},
+            "flour":{"price":200,"qty":100},
+            "sugar":{"price":200,"qty":100},
+            "coffee":{"price":200,"qty":100},
+            "beef":{"price":300,"qty":100},
+            "beries":{"price":200,"qty":100},
+            "fish":{"price":200,"qty":100},
+            "pasta":{"price":200,"qty":100},
+            "sausage":{"price":100,"qty":100},
+            "dessert":{"price":200,"qty":100},
+            "cream cheese":{"price":200,"qty":100},
+            "eggs":{"price":200,"qty":100},
+            "salt":{"price":400,"qty":100},
+            "oil":{"price":200,"qty":100},
+            "water":{"price":200,"qty":100},
+            "coffee":{"price":200,"qty":100},
+            "cabbage":{"price":300,"qty":100},
+            "mushroom":{"price":200,"qty":100},
+            "broccoli":{"price":700,"qty":100},
+            "peas":{"price":800,"qty":100}
+        })
 
 
 if __name__ == '__main__':

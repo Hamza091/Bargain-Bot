@@ -1,0 +1,166 @@
+version: "3.1"
+nlu:
+- intent: how_are_you
+  examples: |
+    - How are you?
+    - I am good. How about you?
+- intent: list_items
+  examples: |
+    - What you sell?
+    - Tell me what you sell?
+    - What items do you have?
+- intent: thanks
+  examples: |
+    - many thanks
+    - thank you
+    - Thank you
+- intent: bot_challenge
+  examples: |
+    - am I talking to a bot?
+    - am I talking to a human?
+    - are you a bot?
+- intent: deny
+  examples: |
+    - no way
+    - n
+    - no
+    - I don't think so
+    - nope
+    - don't like that
+    - never
+- intent: greet
+  examples: |
+    - good afternoon
+    - good evening
+    - hi
+    - hello there
+    - goodmorning
+    - hey
+    - good morning
+    - hello
+- intent: goodbye
+  examples: |
+    - cu
+    - goodbye
+    - bye bye
+    - have a nice day
+    - good by
+    - cee you later
+    - bye
+    - see you around
+- intent: affirm
+  examples: |
+    - go ahead
+    - sure
+    - yep
+    - correct
+    - y
+    - yes you can
+    - indeed
+    - of course
+- intent: mood_great
+  examples: |
+    - I am great
+    - so good
+    - I am amazing
+    - extremely good
+    - super stoked
+    - wonderful
+    - I am feeling very good
+    - feeling like a king
+    - perfect
+    - I am going to save the world
+    - amazing
+- intent: mood_unhappy
+  examples: |
+    - I'm so sad
+    - unhappy
+    - so sad
+    - very sad
+    - I don't feel very well
+    - extremly sad
+    - sad
+    - I am disappointed
+    - super sad
+    - so saad
+    - my day was horrible
+- intent: place_order
+  examples: |
+    - Only place order for [butter](product), [sugar](product) and [fish](product)
+    - What's my bill?
+    - Can you show me details of product in my cart?
+    - Just place order for [lemons](product) and [grapes](product) only
+    - Place order only for [5kg](quantity) [mangoes](product)
+    - Give me details of products in my cart
+    - Just place order for [5kg](quantity) [apples](product) and [10kg](quantity) [mangoes](product)
+    - Show me products of my cart
+    - What's in my cart
+    - Place my order only [15kg](quantity) [tomatoes](product) and [2kg](quantity) [potatoes](product)
+    - Place order for [apples](product), [banannas](product) and [mangoes](product)
+    - Place my order for all items
+- intent: product_query
+  examples: |
+    - Add [apples](product) in my cart
+    - [3kg](quantity)
+    - [strawberries](product)
+    - [mushroom](product)
+    - [6kg](quantity)
+    - Include [cabbages](product) in my cart
+    - [0123456789](quantity)
+    - [broccoli](product)
+    - [coriander leaves](product)
+    - [flour](product)
+    - [oil](product)
+    - [beef](product)
+    - Hi I want to buy [potatoes](product)
+    - [cherry](product)
+    - [salt](product)
+    - [butter](product)
+    - [coffee](product)
+    - [pomegranate](product)
+    - [guava](product)
+    - [coconut](product)
+    - Do you sell [oranges](product) and [mangoes](product)?
+    - [capsicum](product)
+    - [lemons](product)
+    - [garlic](product)
+    - [dessert](product)
+    - How much for [6](quantity) kg of [oranges](product)
+    - [hazelnut](product)
+    - How much for [10kg](quantity) of [oranges](product)?
+    - [pasta](product)
+    - [sugar](product)
+    - [cream cheese](product)
+    - [9kg](quantity)
+    - [eggs](product)
+    - [cabbage](product)
+    - [pineapple](product)
+    - [water](product)
+    - Do you have [apples](product), [banannas](product) and [mangoes](product)?
+    - [avacados](product)
+    - [beans](product)
+    - I want to purchase [mangoes](product)
+    - [watermelon](product)
+    - I want [milk](product) and some [tomatoes](product)
+    - Do you have [apples](product)?
+    - Please add [mangoes](product) and [grapes](product) in my cart
+    - [pumpkin](product)
+    - [papaya](product)
+    - [caulifower](product)
+    - [peaches](product)
+    - I want [5](quantity) kg of [apples](product)
+    - What is price of [apples](product)?
+    - [yogurt](product)
+    - [grapes](product)
+    - [chicken](product)
+    - [2kg](quantity)
+    - [7kg](quantity)
+    - [kiwi](product)
+    - [beetroot](product)
+    - [blue band](product)
+    - [1kg](quantity)
+    - [mint](product)
+    - [sausage](product)
+    - [spring onion](product)
+    - Tell me price of [5kg](quantity) [mangoes](product)
+    - [5kg](quantity)

@@ -1,0 +1,76 @@
+version: "3.1"
+stories:
+- story: bot challenge (.\tests\test_stories.yml)
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot  # predicted: utter_happy
+- story: sad path 1 (.\tests\test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy  # predicted: action_confirm_order after action_unlikely_intent
+- story: place order(1) (.\tests\test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: product_query
+    entities:
+    - product: potatoes
+    - product: tomatoes
+    - product: onions
+  - slot_was_set:
+    - product:
+      - potatoes
+      - tomatoes
+      - onions
+  - action: action_product_query  # predicted: action_unlikely_intent
+  - intent: affirm  # predicted: place_order: okay you can place my order
+  - action: action_confirm_order  # predicted: action_unlikely_intent
+- story: place order(2) (.\tests\test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: product_query
+    entities:
+    - product: potatoes
+    - product: tomatoes
+    - product: mangoes
+  - slot_was_set:
+    - product:
+      - potatoes
+      - tomatoes
+      - mangoes
+  - action: action_product_query  # predicted: action_unlikely_intent
+  - intent: affirm  # predicted: place_order: Looks good. Please place my order
+  - action: action_confirm_order  # predicted: action_unlikely_intent
+- story: place order(3) (.\tests\test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: product_query
+    entities:
+    - product: potatoes
+    - product: tomatoes
+    - product: mangoes
+  - slot_was_set:
+    - product:
+      - potatoes
+      - tomatoes
+      - mangoes
+  - action: action_product_query  # predicted: action_unlikely_intent
+  - intent: product_query
+    entities:
+    - product: vegetables
+  - slot_was_set:
+    - product:
+      - fruits
+      - vegetables
+  - action: action_product_query  # predicted: action_unlikely_intent
+  - intent: place_order
+  - action: action_place_order
+  - intent: affirm
+  - action: action_confirm_order

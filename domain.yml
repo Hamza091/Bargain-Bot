@@ -9,6 +9,7 @@ intents:
   - product_query
   - list_items
   - place_order
+  - how_are_you
   - affirm
   - deny
 
@@ -31,6 +32,9 @@ slots:
 responses:
   utter_greet:
   - text: "Hey! How are you?"
+
+  # utter_ask_budget:
+  # - text: "What's your budget?"
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
@@ -63,6 +67,7 @@ actions:
   - action_product_query
   - action_place_order
   - action_confirm_order
+  # - action_negotiate_overall
 
 session_config:
   session_expiration_time: 60

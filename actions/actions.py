@@ -29,15 +29,30 @@ import requests
 #
 #         return []
 
+# class ActionNegotiateOverall(Action):
+
+#     def name(self) -> Text:
+#         return "action_negotiate_overall"
+
+#     def run(self, dispatcher: CollectingDispatcher,
+#             tracker: Tracker,
+#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+#         budget = 0
+#         entities = tracker.latest_message['entities']
+#         for entity in entities:
+#             if entity['entity']=='quantity':
+#                 budget = entity['value']
+
+
+#         return []
+
 class ActionProductQuery(Action):
 
     def name(self) -> Text:
         return "action_product_query"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:       
-        
+    def extractProductsInfo(self,tracker):
         # extract all product names and their quantities
         products = []
         entities = tracker.latest_message['entities']
@@ -57,40 +72,14 @@ class ActionProductQuery(Action):
                 products.append([product,int(qty)])
                 quantity="1"
         
-        #print(products)
+        return products
+
+    def checkProductsAvailability(self,products):
         # check if products are available
+        estoreProducts = requests.get("http://127.0.0.1:5000/products")
+        estoreProducts = estoreProducts.json()
+        # print(estoreProducts)
         
-        estoreProducts = {
-            "tomatoes":{"price":500,"qty":400},
-            "potatoes":{"price":400,"qty":300},
-            "apples":{"price":300,"qty":100},
-            "banannas":{"price":100,"qty":200},
-            "grapes":{"price":100,"qty":200},
-            "onions":{"price":200,"qty":100},
-            "chicken":{"price":200,"qty":100},
-            "butter":{"price":200,"qty":100},
-            "yogurt":{"price":400,"qty":100},
-            "brown bread":{"price":300,"qty":100},
-            "flour":{"price":200,"qty":100},
-            "sugar":{"price":200,"qty":100},
-            "coffee":{"price":200,"qty":100},
-            "beef":{"price":300,"qty":100},
-            "beries":{"price":200,"qty":100},
-            "fish":{"price":200,"qty":100},
-            "pasta":{"price":200,"qty":100},
-            "sausage":{"price":100,"qty":100},
-            "dessert":{"price":200,"qty":100},
-            "cream cheese":{"price":200,"qty":100},
-            "eggs":{"price":200,"qty":100},
-            "salt":{"price":400,"qty":100},
-            "oil":{"price":200,"qty":100},
-            "water":{"price":200,"qty":100},
-            "coffee":{"price":200,"qty":100},
-            "cabbage":{"price":300,"qty":100},
-            "mushroom":{"price":200,"qty":100},
-            "broccoli":{"price":700,"qty":100},
-            "peas":{"price":800,"qty":100}
-        }
 
         available = []
         unavailable = []
@@ -106,7 +95,10 @@ class ActionProductQuery(Action):
             else:
                 # product is not available
                 unavailable.append(name)
+        
+        return available,unavailable
 
+    def generateResponse(self,available,unavailable):
         #generate response
         # print(available)
         # print(unavailable)
@@ -128,7 +120,7 @@ class ActionProductQuery(Action):
                     response+=str(product[1])
                     if(product!=available[len(available)-1]):
                         response+=","        
-                response+=". "
+                response+=". Items are added to your cart."
             else:
                 verb=""
                 if response[-1]=="s":
@@ -138,10 +130,7 @@ class ActionProductQuery(Action):
 
                 response+=verb
                 response+="available. The price is "
-                response+=str(available[0][1])+". "
-
-            
-
+                response+=str(available[0][1])+". Item is added to your cart."
 
         #response for unavailable products
         if len(unavailable)>0:
@@ -166,6 +155,16 @@ class ActionProductQuery(Action):
         if(len(response)==0):
             response = "Please specify products that you want to buy. Make sure spellings are correct."
 
+        return response
+
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:       
+        
+        products = self.extractProductsInfo(tracker)
+        available,unavailable = self.checkProductsAvailability(products)
+        response = self.generateResponse(available,unavailable)
         dispatcher.utter_message(text=response)
 
         # SlotSet is used to hold information. In this case requested_products
@@ -190,10 +189,36 @@ class ActionProductQuery(Action):
         return [SlotSet("requested_products", available)]
         
 
+
 class ActionPlaceOrder(Action):
 
     def name(self) -> Text:
         return "action_place_order"
+
+    def filterProducts(self,entities,products):
+        # filter products if user selected some products from requested products in current message
+        response = ""
+        filteredProducts =[]
+        totalPrice = 0
+        reqProducts = []
+        for entity in entities:    
+            if entity['entity']=='product':
+                reqProducts.append(entity['value'])
+        
+        response="Your requested products are "
+        for product in products: #product[0]:name product[1]:price product[2]:quantity
+            if product[0] in reqProducts:
+                response+=str(product[2])
+                response+="kg "
+                response+=product[0]
+                if product[0]!=products[len(products)-1][0]:
+                    response+=", "
+                else:
+                    response+=". "
+                totalPrice+=product[1]
+                filteredProducts.append(product)
+
+        return filteredProducts,totalPrice
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -203,7 +228,7 @@ class ActionPlaceOrder(Action):
         entities = []
 
         # fetch all the products that user asked in previous actoin
-        # checks are used to handle "none" cases
+        # checks are used to handle "none" value cases
         if tracker.get_slot("requested_products"):
             products = tracker.get_slot("requested_products")
         
@@ -218,26 +243,9 @@ class ActionPlaceOrder(Action):
 
         # filter products if user selected some products from requested products in current message
         response = ""
-        if len(products)>0 and len(entities)>0:
-            filteredProducts =[]
-            totalPrice = 0
-            reqProducts = []
-            for entity in entities:    
-                if entity['entity']=='product':
-                    reqProducts.append(entity['value'])
-            
-            response="Your requested products are "
-            for product in products: #product[0]:name product[1]:price product[2]:quantity
-                if product[0] in reqProducts:
-                    response+=str(product[2])
-                    response+="kg "
-                    response+=product[0]
-                    if product[0]!=products[len(products)-1][0]:
-                        response+=", "
-                    else:
-                        response+=". "
-                    totalPrice+=product[1]
-                    filteredProducts.append(product)       
+        if len(products)>0 and len(entities)>0:   
+
+            filteredProducts,totalPrice = self.filterProducts(entities,products)
 
             response+="The total price is: "
             response+=str(totalPrice)
@@ -267,14 +275,7 @@ class ActionPlaceOrder(Action):
         else:
             response="Please specify products that you want to purchase."
 
-        # for entity in entities:
-        #     print(entity)
-
-        # for item in tracker.slots:
-        #     print(item)
-        # products = tracker.slots["product"]
-        
-        # print(products)
+   
         dispatcher.utter_message(text=response)
 
         return []

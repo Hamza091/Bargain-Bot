@@ -47,6 +47,36 @@ import requests
 
 #         return []
 
+class ActionFetchDiscount(Action):
+
+    def name(self) -> Text:
+        return "action_fetch_discount"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        # fetch discount from API(send userid from tracker.sender_id)
+        #for now setting discount to default value
+        discount = 0.2
+        return [SlotSet("discount", discount),SlotSet("netDiscount", 0),SlotSet("netDiscountReceived", 0)]
+
+def adjustDiscounts(products,discount,netDiscountReceived):
+    totDiscount=0
+    for p in products:
+        totalPrice = p[1]
+        totDiscount+=(totalPrice*discount)
+    
+    if netDiscountReceived>totDiscount:
+        netDiscountReceived=totDiscount
+        totDiscount=0
+    else:
+        totDiscount=totDiscount-netDiscountReceived
+    
+    print(totDiscount)
+    print(netDiscountReceived)
+    return totDiscount,netDiscountReceived
+
 class ActionProductQuery(Action):
 
     def name(self) -> Text:
@@ -158,6 +188,7 @@ class ActionProductQuery(Action):
         return response
 
 
+
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:       
@@ -186,7 +217,12 @@ class ActionProductQuery(Action):
                     if(f):
                         available.append(p)
 
-        return [SlotSet("requested_products", available)]
+        #adjust discounts
+        discount = tracker.get_slot("discount")
+        netDiscountReceived = tracker.get_slot("netDiscountReceived")
+        netDiscount,netDiscountReceived = adjustDiscounts(available,discount,netDiscountReceived) 
+        
+        return [SlotSet("requested_products", available),SlotSet("netDiscount", netDiscount),SlotSet("netDiscountReceived",netDiscountReceived)]
         
 
 
@@ -250,9 +286,14 @@ class ActionPlaceOrder(Action):
             response+="The total price is: "
             response+=str(totalPrice)
             response+=". Should I place your order?"
-
+            
+            #adjust discounts
+            discount = tracker.get_slot("discount")
+            netDiscountReceived = tracker.get_slot("netDiscountReceived")
+            netDiscount,netDiscountReceived = adjustDiscounts(filteredProducts,discount,netDiscountReceived)
             dispatcher.utter_message(text=response)
-            return [SlotSet("requested_products", filteredProducts)]
+            
+            return [SlotSet("requested_products", filteredProducts),SlotSet("netDiscount", netDiscount),SlotSet("netDiscountReceived",netDiscountReceived)]
         
         elif len(products)>0:
             # if user ask to place order for all requested products

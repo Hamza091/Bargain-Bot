@@ -2,17 +2,25 @@ version: "3.1"
 
 stories:
 
+- story: converstion start
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: action_fetch_discount
+
 - story: product query path
   steps:
   - intent: list_items
   - action: utter_list_items
   - intent: product_query
   - action: action_product_query
+
+# - story: negotiation
+#   steps:
   # - intent: want_discount
   # - action: utter_ask_budget
   # - intent: negotiate_overall
   # - action: action_negotiate_overall
-
 
 - story: place order
   steps:
@@ -30,15 +38,11 @@ stories:
 
 - story: happy path
   steps:
-  - intent: greet
-  - action: utter_greet
   - intent: mood_great
   - action: utter_happy
 
 - story: sad path 1
   steps:
-  - intent: greet
-  - action: utter_greet
   - intent: mood_unhappy
   - action: utter_cheer_up
   - action: utter_did_that_help
@@ -47,8 +51,6 @@ stories:
 
 - story: sad path 2
   steps:
-  - intent: greet
-  - action: utter_greet
   - intent: mood_unhappy
   - action: utter_cheer_up
   - action: utter_did_that_help

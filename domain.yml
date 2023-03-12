@@ -28,6 +28,19 @@ slots:
     mappings:
     - type: custom
       actions: action_product_query
+  discount:
+    type: text
+    mappings:
+    - type: custom
+      actions: action_fetch_discount
+  netDiscount:
+    type: text
+    mappings:
+    - type: custom
+  netDiscountReceived:
+    type: text
+    mappings:
+    - type: custom
 
 responses:
   utter_greet:
@@ -67,6 +80,7 @@ actions:
   - action_product_query
   - action_place_order
   - action_confirm_order
+  - action_fetch_discount
   # - action_negotiate_overall
 
 session_config:

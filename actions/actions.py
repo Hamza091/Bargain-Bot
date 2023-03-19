@@ -8,7 +8,7 @@
 # This is a simple example for a custom action which utters "Hello World!"
 
 from typing import Any, Text, Dict, List
-
+from rasa_sdk.executor import ActionExecutor
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
@@ -29,23 +29,81 @@ import requests
 #
 #         return []
 
-# class ActionNegotiateOverall(Action):
+class ActionNegotiate(Action):
 
-#     def name(self) -> Text:
-#         return "action_negotiate_overall"
+    def name(self) -> Text:
+        return "action_negotiate"
 
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def ExtractProductsAndPrices(self , tracker):
 
-#         budget = 0
-#         entities = tracker.latest_message['entities']
-#         for entity in entities:
-#             if entity['entity']=='quantity':
-#                 budget = entity['value']
+        # fetching products and their desired prices or overall price
+        entities = tracker.latest_message['entities']
+        products = []
+        product = []
+        prices =  []
+        
+        for entity in entities:
+            if entity['entity']=='product':
+                product.append(entity['value'])
+            else:
+                prices.append(entity['value'])
 
+        ind=len(product)-1
+        for price in reversed(prices):
+            if ind<0: break
+            products.append([product[ind],int(price)])
+            ind-=1
 
-#         return []
+        return products
+
+    
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        productsInfo = self.ExtractProductsAndPrices(tracker)       
+        cart = tracker.get_slot("requested_products")
+
+        requestedDiscount=0
+        # if(len(productsInfo)==1):
+        #     # check if user wants overall discount
+        #     if(productsInfo[0][1]=="-"):
+        #         requestedDiscount = productsInfo[0][1]
+        # else:
+        print(productsInfo)
+        #check how much discount user wants on each product        
+        for product in productsInfo:
+            name = product[0]
+            desiredPrice = product[1]
+            #search this product in cart to compute difference between actual price and requested price
+            for item in cart:
+                if item[0]==name:
+                    requestedDiscount+=item[1]-desiredPrice
+                    break
+    
+        netDiscount = tracker.get_slot("netDiscount")
+        netDiscountReceived = tracker.get_slot("netDiscountReceived")
+
+        #calculate total price
+        tot=0
+        for item in cart:
+            tot+=item[1]
+
+        if requestedDiscount<=netDiscount:
+            # offer accepted
+            netDiscountReceived+=requestedDiscount
+            netDiscount-=requestedDiscount
+            
+            
+            # price after discount
+            tot-=netDiscountReceived
+            dispatcher.utter_message(text="Offer Accepted. Your total bill after discount would be "+str(tot))
+
+        else:
+            # offer rejected
+            dispatcher.utter_message(text="Sorry, That's too much. I would be making no profit in this deal. ")
+       
+        return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
 
 class ActionFetchDiscount(Action):
 
@@ -254,7 +312,7 @@ class ActionPlaceOrder(Action):
                 totalPrice+=product[1]
                 filteredProducts.append(product)
 
-        return filteredProducts,totalPrice
+        return filteredProducts,totalPrice,response
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -279,18 +337,21 @@ class ActionPlaceOrder(Action):
 
         # filter products if user selected some products from requested products in current message
         response = ""
+        netDiscountReceived = tracker.get_slot("netDiscountReceived")
+        print(netDiscountReceived)
         if len(products)>0 and len(entities)>0:   
 
-            filteredProducts,totalPrice = self.filterProducts(entities,products)
-
-            response+="The total price is: "
-            response+=str(totalPrice)
-            response+=". Should I place your order?"
+            filteredProducts,totalPrice,response = self.filterProducts(entities,products)
             
             #adjust discounts
             discount = tracker.get_slot("discount")
             netDiscountReceived = tracker.get_slot("netDiscountReceived")
             netDiscount,netDiscountReceived = adjustDiscounts(filteredProducts,discount,netDiscountReceived)
+            
+            response+="The total price is: "
+            response+=str(totalPrice-netDiscountReceived)
+            response+=". Should I place your order?"
+            
             dispatcher.utter_message(text=response)
             
             return [SlotSet("requested_products", filteredProducts),SlotSet("netDiscount", netDiscount),SlotSet("netDiscountReceived",netDiscountReceived)]
@@ -310,7 +371,7 @@ class ActionPlaceOrder(Action):
                 totalPrice+=product[1]       
 
             response+="The total price is: "
-            response+=str(totalPrice)
+            response+=str(totalPrice-netDiscountReceived)
             response+=". Should I place your order?"
         
         else:

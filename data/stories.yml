@@ -15,10 +15,12 @@ stories:
   - intent: product_query
   - action: action_product_query
 
-# - story: negotiation
-#   steps:
-  # - intent: want_discount
-  # - action: utter_ask_budget
+- story: negotiation
+  steps:
+  - intent: want_discount
+  - action: utter_ask_budget
+  - intent: negotiate
+  - action: action_negotiate
   # - intent: negotiate_overall
   # - action: action_negotiate_overall
 

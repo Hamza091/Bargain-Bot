@@ -29,6 +29,51 @@ import requests
 #
 #         return []
 
+class ActionNegotiateOverall(Action):
+
+    def name(self) -> Text:
+        return "action_negotiate_overall"
+
+    def ExtractPrice(self,tracker):
+        entities = tracker.latest_message['entities']
+        for entity in entities:
+            if entity['entity']=='quantity':
+                return int(entity['value'])
+        return 0
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        requestedPrice = self.ExtractPrice(tracker)
+        netDiscount = tracker.get_slot("netDiscount")
+        netDiscountReceived = tracker.get_slot("netDiscountReceived")
+        cart = tracker.get_slot("requested_products")
+
+        #calculate total amount
+        tot=0
+        for item in cart:
+            tot+=item[1]
+
+        requestedDiscount = tot-requestedPrice
+
+        if requestedDiscount<=netDiscount:
+            # offer accepted
+            netDiscountReceived+=requestedDiscount
+            netDiscount-=requestedDiscount
+            
+            
+            # price after discount
+            tot-=netDiscountReceived
+            dispatcher.utter_message(text="Offer Accepted. Your total bill after discount would be "+str(tot))
+
+        else:
+            # offer rejected
+            dispatcher.utter_message(text="Sorry, That's too much. I would be making no profit from this deal. ")
+       
+        return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
+
+
 class ActionNegotiate(Action):
 
     def name(self) -> Text:
@@ -47,7 +92,8 @@ class ActionNegotiate(Action):
                 product.append(entity['value'])
             else:
                 prices.append(entity['value'])
-
+        
+        #connecting products with prices
         ind=len(product)-1
         for price in reversed(prices):
             if ind<0: break
@@ -101,7 +147,7 @@ class ActionNegotiate(Action):
 
         else:
             # offer rejected
-            dispatcher.utter_message(text="Sorry, That's too much. I would be making no profit in this deal. ")
+            dispatcher.utter_message(text="Sorry, That's too much. I would be making no profit from this deal. ")
        
         return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
 

@@ -10,6 +10,7 @@ intents:
   - list_items
   - place_order
   - want_discount
+  - negotiate_overall
   - negotiate
   - how_are_you
   - affirm
@@ -84,7 +85,7 @@ actions:
   - action_confirm_order
   - action_fetch_discount
   - action_negotiate
-  # - action_negotiate_overall
+  - action_negotiate_overall
 
 session_config:
   session_expiration_time: 60

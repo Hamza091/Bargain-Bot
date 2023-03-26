@@ -70,17 +70,23 @@ nlu:
     - [1000](quanitity) is too much for me.
     - [500](quantity) is too much for 3kg [onions](product).
 
-- intent: negotiate
+- intent: negotiate_overall
   examples: |
     - My budget is only [500](quantity)
     - How about [400](quantity)
-    - That's too much for [tomatoes](product). Make it [230](quantity) only
+    - How about [300](quantity)?
+    - Let's make a deal for [500](quantity)
     - Make it [200](quantity)
+    - I will buy for [500](quantity) only
+    - I have [100](quantity) only
+
+- intent: negotiate
+  examples: |   
+    - That's too much for [tomatoes](product). Make it [230](quantity) only
     - Make it [100](quantity) for [oranges](product), [200](quantity) for [apples](product) and [300](quantity) for [potatoes](product)
     - I will place order, if you make it [400](quantity)
     - I will buy [mangoes](product) for [250](quantity), [oranges](product) for [100](quantity)
-    - How about [300](quantity)?
-    - Let's make a deal for [500](quantity)
+
   
 
 - intent: product_query
@@ -99,7 +105,7 @@ nlu:
     - Tell me price of [5kg](quantity) [mangoes](product)
     - How much for [6](quantity) kg of [oranges](product)
     - I want [5](quantity) kg of [apples](product)
-    - How much for [10kg](quantity) of [oranges](product)?
+    - How much for [10kg](quantity) of [onions](product)?
     - Do you have [2kg](quantity) [potatoes](product)?
     - [peaches](product)
     - [blue band](product)

@@ -87,7 +87,9 @@ nlu:
     - I will place order, if you make it [400](quantity)
     - I will buy [mangoes](product) for [250](quantity), [oranges](product) for [100](quantity)
 
-  
+# - regex: weight
+#   examples: |
+#     - [0-9]+(\s*(kg|kilograms?))?
 
 - intent: product_query
   examples: |
@@ -171,6 +173,8 @@ nlu:
     - [pineapple](product)
     - [strawberries](product)
     - [watermelon](product)
+
+
 
 - intent: affirm
   examples: |

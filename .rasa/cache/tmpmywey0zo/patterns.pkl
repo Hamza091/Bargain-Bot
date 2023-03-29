@@ -1,0 +1,6 @@
+[
+  {
+    "name": "weight",
+    "pattern": "[0-9]+\\s*(kg|kilograms?)"
+  }
+]

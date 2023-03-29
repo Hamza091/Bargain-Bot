@@ -55,7 +55,7 @@ class ActionNegotiateOverall(Action):
         for item in cart:
             tot+=item[1]
 
-        requestedDiscount = tot-requestedPrice
+        requestedDiscount = tot-netDiscountReceived-requestedPrice
 
         if requestedDiscount<=netDiscount:
             # offer accepted
@@ -70,7 +70,8 @@ class ActionNegotiateOverall(Action):
         else:
             # offer rejected
             dispatcher.utter_message(text="Sorry, That's too much. I would be making no profit from this deal. ")
-       
+        print(netDiscount)
+        print(netDiscountReceived)
         return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
 
 
@@ -177,8 +178,8 @@ def adjustDiscounts(products,discount,netDiscountReceived):
     else:
         totDiscount=totDiscount-netDiscountReceived
     
-    print(totDiscount)
-    print(netDiscountReceived)
+    print("netDiscount: ",totDiscount)
+    print("netDiscountReceived: ",netDiscountReceived)
     return totDiscount,netDiscountReceived
 
 class ActionProductQuery(Action):

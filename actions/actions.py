@@ -189,25 +189,29 @@ class ActionProductQuery(Action):
 
     def extractProductsInfo(self,tracker):
         # extract all product names and their quantities
+        # assuming user would give quantity for each product!
         products = []
+        quantities = []
         entities = tracker.latest_message['entities']
         
-        quantity="1"
-        product=""
         for entity in entities:    
             if entity['entity']=='quantity':
-                quantity = entity['value']
-            elif entity['entity']=='product':
-                product = entity['value']
-                # if product is found then it is expected that quantity is also found for that product if not then it's default valud would be 1
-                #convert quantity to int and remove the unit 
-                #removing non-digit characters using regex
-                qty = re.sub(r"\D","",quantity)
-                
-                products.append([product,int(qty)])
-                quantity="1"
-        
-        return products
+                quantities.append(entity['value'])
+            else:
+                products.append(entity['value'])
+
+        cart = []
+        j = 0
+        for i in range(0,len(products)):
+            if j<len(quantities):
+                qty = re.sub(r"\D","",quantities[j])
+                j+=1
+            else:
+                qty = "1"
+            cart.append([products[i],int(qty)])
+
+         
+        return cart
 
     def checkProductsAvailability(self,products):
         # check if products are available
@@ -230,7 +234,7 @@ class ActionProductQuery(Action):
             else:
                 # product is not available
                 unavailable.append(name)
-        
+        # print(available)
         return available,unavailable
 
     def generateResponse(self,available,unavailable):

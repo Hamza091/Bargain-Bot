@@ -79,13 +79,15 @@ nlu:
     - Make it [200](quantity)
     - I will buy for [500](quantity) only
     - I have [100](quantity) only
+    - I will place order, if you make it [400](quantity)
 
 - intent: negotiate
   examples: |   
     - That's too much for [tomatoes](product). Make it [230](quantity) only
     - Make it [100](quantity) for [oranges](product), [200](quantity) for [apples](product) and [300](quantity) for [potatoes](product)
-    - I will place order, if you make it [400](quantity)
     - I will buy [mangoes](product) for [250](quantity), [oranges](product) for [100](quantity)
+    - That's too much for [oranges](product) and [grapes](product). Make them [700](quantity) and [130](quantity) only
+    - The price is a bit steep for [chicken](product). Could you bring it down to [450](quantity) per kilo?
 
 - regex: quantity
   examples: |

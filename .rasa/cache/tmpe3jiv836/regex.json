@@ -1,6 +1,0 @@
-[
-  {
-    "name": "quantity",
-    "pattern": "[0-9]+(\\s*(kg|kilograms)?)?"
-  }
-]

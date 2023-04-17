@@ -29,6 +29,7 @@ import requests
 #
 #         return []
 
+
 class ActionNegotiateOverall(Action):
 
     def name(self) -> Text:
@@ -189,7 +190,7 @@ class ActionProductQuery(Action):
 
     def extractProductsInfo(self,tracker):
         # extract all product names and their quantities
-        # assuming user would give quantity for each product!
+        # assuming user would give quantity for each product! else quantity extraction might be wrong
         products = []
         quantities = []
         entities = tracker.latest_message['entities']

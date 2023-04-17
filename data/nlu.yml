@@ -14,6 +14,7 @@ nlu:
     - goodevening
     - good afternoon
 
+
 - intent: goodbye
   examples: |
     - cu
@@ -52,6 +53,24 @@ nlu:
     - What you sell?
     - Tell me what you sell?
 
+- intent: remove_or_update_items
+  examples: |
+    - Please remove [grapes](product) from my cart
+    - Please remove [chicken](product) from my cart
+    - Please remove [onions](product) and [beef](product) from my cart
+    - kindly remove [apples](product)
+    - Can you remove [mangoes](product) from my cart
+    - Remove [banannas](product) from my cart
+    - Can you remove [sugar](product), [butter](product) and [mangoes](product)
+    - I want to remove [lemons](product) from my cart.
+    - Please remove [3](quantity)kg [oranges](product) from my cart
+    - Please remove [14](quantity)kg [chicken](product) from my cart
+    - Please remove [19](quantity)kg [onions](product) and [50](quantity)kg [beef](product) from my cart
+    - kindly remove [65](quantity)kg [apples](product)
+    - Can you remove [15](quantity)kg [mangoes](product) from my cart
+    - Remove [20](quantity)kg [banannas](product) from my cart
+    - Can you remove [45](quantity)kg [sugar](product), [25](quantity)kg [butter](product) and [35](quantity)kg [mangoes](product)
+    - I want to remove [3](quantity)kg [lemons](product) from my cart.
 
 - intent: want_discount
   examples: |

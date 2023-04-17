@@ -15,6 +15,7 @@ intents:
   - how_are_you
   - affirm
   - deny
+  - remove_or_update_items
 
 entities:
   - product
@@ -86,6 +87,7 @@ actions:
   - action_fetch_discount
   - action_negotiate
   - action_negotiate_overall
+  - action_remove_or_update_items
 
 session_config:
   session_expiration_time: 60

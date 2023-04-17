@@ -29,6 +29,60 @@ import requests
 #
 #         return []
 
+class ActionUpdateCart(Action):
+
+    def name(self) -> Text:
+        return "action_remove_or_update_items"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        products = {}
+        entities = tracker.latest_message['entities']
+
+        #Map product with it's quantity
+        productNames = [] 
+        quantities = []
+        for entity in entities:
+            if entity['entity']=='quantity':
+                qty = re.sub(r"\D","",entity['value'])
+                quantities.append(int(qty))
+            else:
+                productNames.append(entity['value'])
+
+        j=0
+        for i in range(0,len(productNames)):
+            if j<len(quantities):
+                products[productNames[i]]=quantities[j]
+                j+=1
+            else:
+                products[productNames[i]]=-1
+
+        print(products)
+        
+        #update cart accordingly
+        cart = tracker.get_slot("requested_products")
+        print(cart)
+        for i in range(0,len(cart)):
+            if cart[i][0] in products:
+                newValue = products[cart[i][0]]
+                if newValue == -1:
+                    # remove entire item
+                    del cart[i]
+                elif newValue <= cart[i][2]:
+                    perUnitPrice = cart[i][1]/cart[i][2]
+                    cart[i][2]-=newValue
+                    cart[i][1]=(cart[i][2]*perUnitPrice)
+
+        print(cart)
+        discount = tracker.get_slot("discount")
+        netDiscountReceived = tracker.get_slot("netDiscountReceived")
+        netDiscount,netDiscountReceived = adjustDiscounts(cart,discount,netDiscountReceived)
+
+        dispatcher.utter_message(text="Your cart has been updated..")
+        return [SlotSet("requested_products", cart),SlotSet("netDiscount", netDiscount),SlotSet("netDiscountReceived",netDiscountReceived)]
+
 
 class ActionNegotiateOverall(Action):
 

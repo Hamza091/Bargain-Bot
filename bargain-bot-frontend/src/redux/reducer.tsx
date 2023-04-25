@@ -19,3 +19,33 @@ export const TextMessageReducer = createSlice({
 
 export const { SET_TEXTMESSGAGE, SET_RESPONSE } = TextMessageReducer.actions;
 export default TextMessageReducer.reducer;
+
+export const RouterReducer = createSlice({
+  name: "Router",
+  initialState: {
+    route: "",
+  },
+  reducers: {
+    SET_ROUTE: (state, action: PayloadAction<string>) => {
+      state.route = action.payload;
+    },
+  },
+});
+
+export const { SET_ROUTE } = RouterReducer.actions;
+export const Router = RouterReducer.reducer;
+
+export const ButtonsReducer = createSlice({
+  name: "Buttons",
+  initialState: {
+    botPopUp: false,
+  },
+  reducers: {
+    SET_BOTPOPUP: (state, action: PayloadAction<boolean>) => {
+      state.botPopUp = action.payload;
+    },
+  },
+});
+
+export const { SET_BOTPOPUP } = ButtonsReducer.actions;
+export const Buttons = ButtonsReducer.reducer;

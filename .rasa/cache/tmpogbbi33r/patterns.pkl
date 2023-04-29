@@ -1,0 +1,10 @@
+[
+  {
+    "name": "quantity",
+    "pattern": "[0-9]+\\s*(kg|kilograms)?"
+  },
+  {
+    "name": "product",
+    "pattern": "(\\b\\{value:\\ data/products\\.txt\\}\\b)"
+  }
+]

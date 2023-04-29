@@ -64,24 +64,25 @@ class ActionUpdateCart(Action):
         #update cart accordingly
         cart = tracker.get_slot("requested_products")
         print(cart)
+        newCart = []
         for i in range(0,len(cart)):
             if cart[i][0] in products:
                 newValue = products[cart[i][0]]
                 if newValue == -1:
-                    # remove entire item
-                    del cart[i]
+                    continue
                 elif newValue <= cart[i][2]:
                     perUnitPrice = cart[i][1]/cart[i][2]
                     cart[i][2]-=newValue
                     cart[i][1]=(cart[i][2]*perUnitPrice)
+            newCart.append(cart[i])
 
         print(cart)
         discount = tracker.get_slot("discount")
         netDiscountReceived = tracker.get_slot("netDiscountReceived")
-        netDiscount,netDiscountReceived = adjustDiscounts(cart,discount,netDiscountReceived)
+        netDiscount,netDiscountReceived = adjustDiscounts(newCart,discount,netDiscountReceived)
 
         dispatcher.utter_message(text="Your cart has been updated..")
-        return [SlotSet("requested_products", cart),SlotSet("netDiscount", netDiscount),SlotSet("netDiscountReceived",netDiscountReceived)]
+        return [SlotSet("requested_products", newCart),SlotSet("netDiscount", netDiscount),SlotSet("netDiscountReceived",netDiscountReceived)]
 
 
 class ActionNegotiateOverall(Action):
@@ -248,7 +249,7 @@ class ActionProductQuery(Action):
         products = []
         quantities = []
         entities = tracker.latest_message['entities']
-        
+        print(entities)
         for entity in entities:    
             if entity['entity']=='quantity':
                 quantities.append(entity['value'])

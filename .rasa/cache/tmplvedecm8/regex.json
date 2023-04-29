@@ -1,0 +1,10 @@
+[
+  {
+    "name": "quantity",
+    "pattern": "[0-9]+\\s*(kg|kilograms)?"
+  },
+  {
+    "name": "product",
+    "pattern": "(\\bapples\\b|\\bbanannas\\b|\\bbeef\\b|\\bberies\\b|\\bbroccoli\\b|\\bbrown\\ bread\\b|\\bbutter\\b|\\bcabbage\\b|\\bchicken\\b|\\bcoffee\\b|\\bcream\\ cheese\\b|\\bdessert\\b|\\beggs\\b|\\bfish\\b|\\bflour\\b|\\bgrapes\\b|\\bmushroom\\b|\\boil\\b|\\bonions\\b|\\bpasta\\b|\\bpeas\\b|\\bpotatoes\\b|\\bsalt\\b|\\bsausage\\b|\\bsugar\\b|\\btomatoes\\b|\\bwater\\b|\\byogurt\\b)"
+  }
+]

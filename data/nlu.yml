@@ -80,6 +80,7 @@ nlu:
     - I don't have enough budget
     - Please make some discount
     - Make it lower
+    - Please offer me some discount
     - I want more discount
     - I want some discount for [onions](product)
     - Please give me some discount for [potatoes](product) and [mangoes](product)
@@ -88,6 +89,7 @@ nlu:
     - Price is out of my budget.
     - [1000](quanitity) is too much for me.
     - [500](quantity) is too much for 3kg [onions](product).
+    - Gimme some discount
 
 - intent: negotiate_overall
   examples: |
@@ -107,10 +109,19 @@ nlu:
     - I will buy [mangoes](product) for [250](quantity), [oranges](product) for [100](quantity)
     - That's too much for [oranges](product) and [grapes](product). Make them [700](quantity) and [130](quantity) only
     - The price is a bit steep for [chicken](product). Could you bring it down to [450](quantity) per kilo?
+    - No. That's too much can you make it [200](quantity) for [grapes](product)
+    - That's too much please make it [300](quantity) for [oranges](product)
+    - No. Make it [300](quantity) for [oranges](product) and [200](quantity) for [grapes](product)
+    - Please Make it [400](quantity) for [200](quantity) for [grapes](product)
+    - Can you lower the price of [onions](product) to [100](quantity)
+    - Can you adjust the price of [mangoes](product) to [300](quantity)
+    - Reduce the price of [apples](product) to [300](quantity)
+    - Please reduce the price of [banannas](product) to [320](quantity)
+
 
 - regex: quantity
   examples: |
-    - [0-9]+\s*(kg|kilograms)?
+    - [0-9]+\s*(kg|kilograms)? 
 
 - intent: product_query
   examples: |
@@ -147,54 +158,6 @@ nlu:
     - [8kg](quantity)
     - [9kg](quantity)
     - [0123456789](quantity)
-    - [chicken](product)
-    - [butter](product)
-    - [yogurt](product)
-    - [brown bread](product)
-    - [flour](product)
-    - [sugar](product)
-    - [coffee](product)
-    - [beef](product)
-    - [beries](product)
-    - [fish](product)
-    - [pasta](product)
-    - [sausage](product)
-    - [dessert](product)
-    - [cream cheese](product)
-    - [eggs](product)
-    - [salt](product)
-    - [oil](product)
-    - [water](product)
-    - [coffee](product)
-    - [cabbage](product)
-    - [mushroom](product)
-    - [pumpkin](product)
-    - [broccoli](product)
-    - [peas](product)
-    - [brinjal](product)
-    - [capsicum](product)
-    - [caulifower](product)
-    - [garlic](product)
-    - [beetroot](product)
-    - [corn](product)
-    - [beans](product)
-    - [lettuce](product)
-    - [coriander leaves](product)
-    - [mint](product)
-    - [spring onion](product)
-    - [mustard greens](product)
-    - [avacados](product)
-    - [cherry](product)
-    - [coconut](product)
-    - [hazelnut](product)
-    - [guava](product)
-    - [kiwi](product)
-    - [papaya](product)
-    - [pomegranate](product)
-    - [pineapple](product)
-    - [strawberries](product)
-    - [watermelon](product)
-
 
 
 - intent: affirm

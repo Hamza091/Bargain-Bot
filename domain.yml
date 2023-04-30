@@ -68,7 +68,7 @@ responses:
   - text: "Bye"
 
   utter_fine:
-  - text: "I am fine."
+  - text: "Great, carry on!"
 
   utter_welcome:
   - text: "My pleasure."

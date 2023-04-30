@@ -1,5 +1,4 @@
 import requests
-import yaml
 
 # make a GET request to the API
 response = requests.get("http://localhost:5000/products")

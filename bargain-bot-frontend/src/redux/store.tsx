@@ -1,10 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import TextMessageReducer from "./reducer";
+import TextMessageReducer, { Buttons } from "./reducer";
+import { Router } from "./reducer";
 import store from "../redux/store";
 
 export default configureStore({
   reducer: {
     TextMessage: TextMessageReducer,
+    Router: Router,
+    Buttons: Buttons,
   },
 });
 

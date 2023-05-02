@@ -2,6 +2,14 @@ from flask import Flask,request,jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import uuid
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
+from joblib import Parallel, delayed
+import joblib
+import datetime
 
 app = Flask(__name__)
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///orders.sqlite3'
@@ -24,6 +32,87 @@ class OrderItems(db.Model):
    
 
 CORS(app)
+
+def get_label(total_purchase, user_importance, total_days, frquency_of_purchases, total_profit):
+    labels = ["High", "Low", "Medimum"]
+    data = list()
+    data.append(list())
+    data[0].append(total_purchase)
+    data[0].append(user_importance)
+    data[0].append(total_days)
+    data[0].append(frquency_of_purchases)
+    data[0].append(total_profit)
+    # Load the model from the file
+    model = joblib.load('model.pkl')
+    # Use the loaded model to make predictions
+    result = model.predict(data)
+    return labels[result[0]]
+
+@app.route('/login',methods=['GET'])
+def login():
+    args = request.args
+    email = args.get("email")
+    
+    df = pd.read_csv('customer.csv')
+    row = df.loc[df['email']==email]
+    if(len(row)>0):
+        userId=row['id'].values[0]
+        return jsonify({"success":1,"userId":userId})
+    
+    return jsonify({"succes":0})
+
+
+
+@app.route('/discount',methods=['GET'])
+def getDiscount():
+    # total_purchase = 50
+    # user_importance = 0.9
+    # total_days = 400
+    # frquency_of_purchases = 0.1
+    # total_profit = 0.1
+
+    # get user id from query params
+    args = request.args
+    uid = int(args.get("uid"))
+    print(uid)
+    # uid = 565
+    total_profit=0
+    df = pd.read_csv('order_data.csv')
+    rows = df.loc[df['customer_id']==uid]
+    total_purchase = len(rows)
+    
+    for index,row in rows.iterrows():
+        total_profit += float(row['total_profit'])
+    
+    total_profit = min(1.0,total_profit)
+
+    df = pd.read_csv('customer.csv')
+    row = df.loc[df['id']==uid]
+    joiningDate = row['date'].values[0]
+    unsuccessfulDeals = row['unsuccessful_deals'].values[0]
+
+    date_obj = datetime.datetime.strptime(joiningDate, '%d-%m-%y').date()
+    delta = datetime.date.today() - date_obj
+    total_days = delta.days
+
+    frquency_of_purchases = min(total_purchase/(total_purchase+unsuccessfulDeals),1.0)
+    user_importance=1.0
+    if total_purchase>0:
+        user_importance = unsuccessfulDeals/(total_purchase+unsuccessfulDeals)
+
+    print(total_purchase,user_importance,total_days,frquency_of_purchases,total_profit)
+    discount = {"High":0.3,"Medimum":0.2,"Low":0.1}
+    # label = get_label(50, 0.9, 400, 0.1, 0)
+    # print(label)
+    label = get_label(total_purchase, user_importance, total_days, frquency_of_purchases, total_profit)
+    return jsonify({"discount":discount[label]})
+
+@app.route('/data',methods=['POST'])
+def postData():
+    response = request.get_json()
+    print(response)
+    return jsonify({"success":1})
+
 
 @app.route('/postOrder',methods=['POST'])
 def postOrder():

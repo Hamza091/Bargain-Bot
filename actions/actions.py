@@ -217,7 +217,14 @@ class ActionFetchDiscount(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        # fetch discount from API(send userid from tracker.sender_id)
+        #tracker.sender_id: fetches sender id from tracker object
+        print(tracker.sender_id)
+        #TO DO
+
+        # Make a GET request with sender_id
+        # Estore server would fetches some parameters required to classify user from database
+        # and it would classify and return the discount
+
         #for now setting discount to default value
         discount = 0.2
         return [SlotSet("discount", discount),SlotSet("netDiscount", 0),SlotSet("netDiscountReceived", 0)]

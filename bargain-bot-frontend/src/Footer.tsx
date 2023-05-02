@@ -7,13 +7,14 @@ import { RootState } from "./redux/store";
 
 export const Footer = () => {
   const text = useSelector((state: RootState) => state.TextMessage.text);
+  const userId = useSelector((state: RootState) => state.TextMessage.userId);
   const [typedMessage, setTypedMessage] = useState("");
   const dispatch = useDispatch();
 
   const SendMessage = async () => {
     console.log(text);
     let data = {
-      sender: "Askari",
+      sender: userId,
       message: text,
     };
 

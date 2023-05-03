@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export const TextMessageReducer = createSlice({
   name: "Message",
   initialState: {
+    userId: null,
     text: "",
     result: [],
   },
@@ -14,10 +15,15 @@ export const TextMessageReducer = createSlice({
       // @ts-ignore
       state.result.push(action.payload);
     },
+    SET_USERID: (state, action: PayloadAction<string>) => {
+      // @ts-ignore
+      state.userId = action.payload;
+    },
   },
 });
 
-export const { SET_TEXTMESSGAGE, SET_RESPONSE } = TextMessageReducer.actions;
+export const { SET_TEXTMESSGAGE, SET_RESPONSE, SET_USERID } =
+  TextMessageReducer.actions;
 export default TextMessageReducer.reducer;
 
 export const RouterReducer = createSlice({

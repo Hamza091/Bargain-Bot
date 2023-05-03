@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { SET_ROUTE } from "./redux/reducer";
+import { SET_ROUTE, SET_USERID } from "./redux/reducer";
+import axios from "axios";
 
 const LoginPage = () => {
-  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const dispatch = useDispatch();
   return (
@@ -13,11 +14,13 @@ const LoginPage = () => {
       <h3 className="font-bold text-[24px] mt-[16px]">Welcome to Store!</h3>
       <div className="mt-[16px]">
         <TextField
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-[350px] bg-[#E8F0FE]"
           id="outlined-basic"
-          label="Username"
+          label="Email"
+          type="email"
           variant="outlined"
+          required
         />
       </div>
       <div className="mt-[16px]">
@@ -28,12 +31,29 @@ const LoginPage = () => {
           label="Password"
           type="password"
           variant="outlined"
+          required
         />
       </div>
       <div
         onClick={() => {
-          console.log(userName, password);
-          dispatch(SET_ROUTE("/store"));
+          axios
+            .post("http://localhost:5000/login", {
+              email: email,
+              password: password,
+            })
+            .then((result) => {
+              if (result.data.success === 1) {
+                dispatch(SET_USERID(result.data.userId));
+                dispatch(SET_ROUTE("/store"));
+              } else {
+                alert("User not found !");
+                console.log(email, password);
+              }
+            })
+            .catch((err) => {
+              alert(err);
+              dispatch(SET_ROUTE("/store"));
+            });
         }}
         className="my-[16px]"
       >

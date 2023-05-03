@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import BargainBot from "./BargainBot";
 import { BsChatTextFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +14,7 @@ const App = () => {
       {!isBotOpen && (
         <div
           onClick={() => dispatch(SET_BOTPOPUP(true))}
-          className="rounded-full animate-bounce absolute z-10 bottom-[20px] cursor-pointer shadow-xl right-[20px] w-[60px] h-[60px] bg-gradient-to-r from-[#4E7AC1]  via-pink-400 to-[#639AE3] flex items-center justify-center"
+          className="rounded-full animate-bounce fixed z-10 bottom-[20px] cursor-pointer shadow-xl right-[20px] w-[60px] h-[60px] bg-gradient-to-r from-[#4E7AC1]  via-pink-400 to-[#639AE3] flex items-center justify-center"
         >
           <BsChatTextFill
             size={40}

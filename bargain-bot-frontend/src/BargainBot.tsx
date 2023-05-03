@@ -15,7 +15,7 @@ function BargainBot() {
   }, [Messages]);
 
   return (
-    <div className="flex flex-col items-center justify-center absolute bottom-[10px] right-[10px] drop-shadow-2xl">
+    <div className="flex flex-col items-center justify-center fixed bottom-[10px] right-[10px] drop-shadow-2xl">
       <Header />
       <div className="flex flex-col justify-start w-[400px] h-[540px] border-[1px] border-slate-300  bg-slate-100 overflow-y-scroll scrollbar-hide">
         {Messages.result &&

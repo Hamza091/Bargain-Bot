@@ -48,18 +48,18 @@ def get_label(total_purchase, user_importance, total_days, frquency_of_purchases
     result = model.predict(data)
     return labels[result[0]]
 
-@app.route('/login',methods=['GET'])
+@app.route('/login',methods=['POST'])
 def login():
-    args = request.args
-    email = args.get("email")
-    
+    data = request.get_json() 
+    print(request.get_json())
+    email = data["email"]
     df = pd.read_csv('customer.csv')
     row = df.loc[df['email']==email]
     if(len(row)>0):
         userId=row['id'].values[0]
-        return jsonify({"success":1,"userId":userId})
+        return jsonify({"success":1,"userId":int(userId)})
     
-    return jsonify({"succes":0})
+    return jsonify({"success":0})
 
 
 
@@ -88,6 +88,7 @@ def getDiscount():
 
     df = pd.read_csv('customer.csv')
     row = df.loc[df['id']==uid]
+    print(row)
     joiningDate = row['date'].values[0]
     unsuccessfulDeals = row['unsuccessful_deals'].values[0]
 

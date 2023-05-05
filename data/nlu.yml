@@ -89,6 +89,7 @@ nlu:
     - Price is out of my budget.
     - [1000](quanitity) is too much for me.
     - [500](quantity) is too much for 3kg [onions](product).
+    - Is it possible for you to make some discount
     - Gimme some discount
 
 - intent: negotiate_overall

@@ -125,7 +125,7 @@ class ActionNegotiateOverall(Action):
 
         else:
             # offer rejected
-            dispatcher.utter_message(text="Sorry, That's too much. I would be making no profit from this deal. ")
+            dispatcher.utter_message(text="Sorry, That's too low. I would be making no profit from this deal. ")
         print(netDiscount)
         print(netDiscountReceived)
         return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
@@ -204,7 +204,7 @@ class ActionNegotiate(Action):
 
         else:
             # offer rejected
-            dispatcher.utter_message(text="Sorry, That's too much. I would be making no profit from this deal. ")
+            dispatcher.utter_message(text="Sorry, I would be making no profit from this deal. However, if you purchase additional items, I can offer a greater discount. ")
        
         return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
 

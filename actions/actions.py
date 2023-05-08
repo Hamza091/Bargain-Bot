@@ -525,4 +525,5 @@ class ActionConfirmOrder(Action):
         else:
             dispatcher.utter_message(text="Great! carry on")
         
-        return [SlotSet(slot, None) for slot in tracker.slots.keys()]
+        return [SlotSet("netDiscountRecieved",0),SlotSet("netDiscount",0),SlotSet("requested_products",None)]
+        

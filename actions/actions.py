@@ -260,7 +260,7 @@ class ActionProductQuery(Action):
         products = []
         quantities = []
         entities = tracker.latest_message['entities']
-        print(entities)
+
         for entity in entities:    
             if entity['entity']=='quantity':
                 quantities.append(entity['value'])
@@ -269,6 +269,8 @@ class ActionProductQuery(Action):
 
         cart = []
         j = 0
+        print("Length of quantities: ",len(quantities))
+        print("Length of products: ",len(products))
         for i in range(0,len(products)):
             if j<len(quantities):
                 qty = re.sub(r"\D","",quantities[j])
@@ -371,6 +373,8 @@ class ActionProductQuery(Action):
         
         products = self.extractProductsInfo(tracker)
         available,unavailable = self.checkProductsAvailability(products)
+        print(available)
+        print(unavailable)
         response = self.generateResponse(available,unavailable)
         dispatcher.utter_message(text=response)
 
@@ -520,4 +524,5 @@ class ActionConfirmOrder(Action):
             dispatcher.utter_message(text="Your order has been placed!")
         else:
             dispatcher.utter_message(text="Great! carry on")
-        return []
+        
+        return [SlotSet(slot, None) for slot in tracker.slots.keys()]

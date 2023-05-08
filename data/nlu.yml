@@ -37,6 +37,8 @@ nlu:
     - Give me details of products in my cart
     - Can you show me details of product in my cart?
     - What's my bill?
+    - Let me know my bill
+    - What's my total bill
     - please place my order
     - Place order for [apples](product), [banannas](product) and [mangoes](product)
     - Place my order for all items
@@ -118,11 +120,12 @@ nlu:
     - Can you adjust the price of [mangoes](product) to [300](quantity)
     - Reduce the price of [apples](product) to [300](quantity)
     - Please reduce the price of [banannas](product) to [320](quantity)
+    - Is it possible for you to lower the price of [apples](product) to [500](quantity)
 
 
-- regex: quantity
-  examples: |
-    - [0-9]+\s*(kg|kilograms)? 
+# - regex: quantity
+#   examples: |
+#     - [0-9]+\s*(kg|kilograms)? 
 
 - intent: product_query
   examples: |
@@ -140,6 +143,7 @@ nlu:
     - Tell me price of [5kg](quantity) [mangoes](product)
     - How much for [6](quantity) kg of [oranges](product)
     - I want [5](quantity) kg of [apples](product)
+    - I want [3kg](quantity) of [mangoes](product)
     - How much for [10kg](quantity) of [onions](product)?
     - Do you have [2kg](quantity) [potatoes](product)?
     - [peaches](product)

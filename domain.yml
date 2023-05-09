@@ -16,6 +16,7 @@ intents:
   - affirm
   - deny
   - remove_or_update_items
+  - accept_offer
 
 entities:
   - product
@@ -42,6 +43,10 @@ slots:
     mappings:
     - type: custom
   netDiscountReceived:
+    type: text
+    mappings:
+    - type: custom
+  counterOffer:
     type: text
     mappings:
     - type: custom
@@ -88,6 +93,7 @@ actions:
   - action_negotiate
   - action_negotiate_overall
   - action_remove_or_update_items
+  - action_accept_offer
 
 session_config:
   session_expiration_time: 60

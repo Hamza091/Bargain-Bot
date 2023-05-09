@@ -26,6 +26,9 @@ stories:
   - action: utter_ask_budget
   - intent: negotiate_overall
   - action: action_negotiate_overall
+  - intent: accept_offer
+  - action: action_accept_offer
+  - action: action_place_order
 
 - story: negotiate specific
   steps:

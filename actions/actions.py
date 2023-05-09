@@ -29,6 +29,27 @@ import requests
 #
 #         return []
 
+class ActionAcceptOffer(Action):
+
+    def name(self) -> Text:
+        return "action_accept_offer"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        offer = tracker.get_slot("counterOffer")
+        netDiscount = tracker.get_slot("netDiscount")
+        discountReceived = tracker.get_slot("netDiscountReceived")
+        offer = int(offer)
+        netDiscount-=offer
+        if discountReceived:
+            discountReceived+=offer
+        else:
+            discountReceived=offer
+
+        return [SlotSet("netDiscount",netDiscount),SlotSet("netDiscountReceived",discountReceived)]
+
 class ActionUpdateCart(Action):
 
     def name(self) -> Text:
@@ -112,7 +133,7 @@ class ActionNegotiateOverall(Action):
             tot+=item[1]
 
         requestedDiscount = tot-netDiscountReceived-requestedPrice
-
+        counterOffer=None
         if requestedDiscount<=netDiscount:
             # offer accepted
             netDiscountReceived+=requestedDiscount
@@ -124,11 +145,20 @@ class ActionNegotiateOverall(Action):
             dispatcher.utter_message(text="Offer Accepted. Your total bill after discount would be "+str(tot))
 
         else:
+            canOffer = tot-netDiscount
+            mid = int((canOffer+requestedPrice)/2)
+            diff = canOffer-mid
+            newOffer = canOffer+diff
+            if newOffer>=tot:
+                newOffer = int((canOffer+tot)/2)
+            counterOffer = tot-newOffer
+            newOffer = str(newOffer)
             # offer rejected
-            dispatcher.utter_message(text="Sorry, That's too low. I would be making no profit from this deal. ")
+            dispatcher.utter_message(text="Sorry, That's too low. I would be making no profit from this deal.")
+            dispatcher.utter_message(text="How about "+newOffer+"?")
         print(netDiscount)
         print(netDiscountReceived)
-        return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
+        return [SlotSet("counterOffer",counterOffer),SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
 
 
 class ActionNegotiate(Action):
@@ -204,6 +234,7 @@ class ActionNegotiate(Action):
 
         else:
             # offer rejected
+            
             dispatcher.utter_message(text="Sorry, I would be making no profit from this deal. However, if you purchase additional items, I can offer a greater discount. ")
        
         return [SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
@@ -525,5 +556,5 @@ class ActionConfirmOrder(Action):
         else:
             dispatcher.utter_message(text="Great! carry on")
         
-        return [SlotSet("netDiscountRecieved",0),SlotSet("netDiscount",0),SlotSet("requested_products",None)]
+        return [SlotSet("netDiscountReceived",0),SlotSet("netDiscount",0),SlotSet("requested_products",None),SlotSet("counterOffer",None)]
         

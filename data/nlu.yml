@@ -104,6 +104,9 @@ nlu:
     - I will buy for [500](quantity) only
     - I have [100](quantity) only
     - I will place order, if you make it [400](quantity)
+    - That's too much please make it [400](quantity)
+    - I would be happy if you make it [500](quantity)
+    
 
 - intent: negotiate
   examples: |   
@@ -122,6 +125,15 @@ nlu:
     - Please reduce the price of [banannas](product) to [320](quantity)
     - Is it possible for you to lower the price of [apples](product) to [500](quantity)
 
+- intent: accept_offer
+  examples: |
+    - Sounds good to me.
+    - Offer accepted.
+    - I am good with it.
+    - Okay, that sounds great!
+    - Okay, I am accepting your offer
+    - I am okay with your offer
+    - deal done
 
 # - regex: quantity
 #   examples: |

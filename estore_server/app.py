@@ -10,28 +10,72 @@ from sklearn.ensemble import RandomForestClassifier
 from joblib import Parallel, delayed
 import joblib
 import datetime
+import csv
 
 app = Flask(__name__)
 app.config ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///orders.sqlite3'
 db = SQLAlchemy(app)
 
-class OrderItems(db.Model):
-   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-   order_id = db.Column(db.String(200))
-   user_id = db.Column(db.String(200))
-   product = db.Column(db.String(50))
-   price = db.Column(db.Integer)
-   quantity = db.Column(db.Integer)
+class Customer(db.Model):
+    id = db.Column(db.String(200),primary_key=True)
+    first_name = db.Column(db.String(200))
+    last_name = db.Column(db.String(200))
+    email = db.Column(db.String(200))
+    date = db.Column(db.String(200))
+    unsuccessful_deals = db.Column(db.String(200))
 
-   def __init__(self, order_id, user_id, product, price, quantity):
-        self.user_id = user_id
-        self.product = product
-        self.price = price
-        self.quantity = quantity
+    def __init__(self,id,first_name,last_name,email,date,unsuccessful_deals):
+        self.id = id
+        self.first_name=first_name
+        self.last_name=last_name
+        self.email=email
+        self.date=date
+        self.unsuccessful_deals=unsuccessful_deals
+
+
+class OrderItems(db.Model):
+    order_id = db.Column(db.String(200),primary_key=True)
+    customer_id = db.Column(db.String(200))
+    date_of_order = db.Column(db.String(200))
+    total_profit = db.Column(db.Integer)
+    selling_price = db.Column(db.Integer)
+
+
+#    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#    order_id = db.Column(db.String(200))
+#    user_id = db.Column(db.String(200))
+#    product = db.Column(db.String(50))
+#    price = db.Column(db.Integer)
+#    quantity = db.Column(db.Integer)
+
+    def __init__(self, order_id, user_id, price, date_of_order, total_profit):
+        self.customer_id = user_id
+        self.total_profit = total_profit
+        self.date_of_order = date_of_order
+        # self.product = product
+        self.selling_price = price
+        # self.quantity = quantity
         self.order_id = order_id
    
 
 CORS(app)
+
+def import_csv_to_database(filename):
+    with open(filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            if row['id']=='': 
+                break
+            my_model_instance = Customer(
+                id = row['id'],
+                first_name=row['first_name'],
+                last_name=row['last_name'],
+                email=row['email'],
+                date =row['date'],
+                unsuccessful_deals = row['unsuccessful_deals']
+            )
+            db.session.add(my_model_instance)
+        db.session.commit()
 
 def get_label(total_purchase, user_importance, total_days, frquency_of_purchases, total_profit):
     labels = ["High", "Low", "Medimum"]
@@ -175,4 +219,9 @@ def getProducts():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        # items = db.session.query(Customer).all()
+        # for item in items:
+        #     print(item.id,item.first_name,item.last_name)
+        # print(items)
+        # import_csv_to_database('customer.csv')
     app.run()

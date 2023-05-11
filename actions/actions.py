@@ -250,11 +250,7 @@ class ActionFetchDiscount(Action):
 
         #tracker.sender_id: fetches sender id from tracker object
         print(tracker.sender_id)
-        #TO DO
         uid = tracker.sender_id
-        # Make a GET request with sender_id
-        # Estore server would fetches some parameters required to classify user from database
-        # and it would classify and return the discount
         data = requests.get("http://localhost:5000/discount?uid="+uid)
         print(data.json())
         #for now setting discount to default value
@@ -548,7 +544,7 @@ class ActionConfirmOrder(Action):
         data = tracker.get_slot("requested_products")
             
         if data:
-            obj = {"data":data}
+            obj = {"data":data,"userId":tracker.sender_id,"netDiscountReceived":tracker.get_slot("netDiscountReceived")}
             print(obj)
             status = requests.post("http://127.0.0.1:5000/postOrder",json=obj)
             print(status)

@@ -9,6 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 from joblib import Parallel, delayed
 import joblib
+import random
 import datetime
 import csv
 
@@ -117,24 +118,37 @@ def getDiscount():
 
     # get user id from query params
     args = request.args
-    uid = int(args.get("uid"))
-    print(uid)
+    
+    uid = args.get("uid")
+    # print(uid)
     # uid = 565
     total_profit=0
-    df = pd.read_csv('order_data.csv')
-    rows = df.loc[df['customer_id']==uid]
+    rows= db.session.query(OrderItems).filter_by(customer_id=uid).all()
+    # rows = OrderItems.query.filter_by(customer_id=1).all()
+
+    # df = pd.read_csv('order_data.csv')
+    # rows = df.loc[df['customer_id']==uid]
+    # print(rows)
     total_purchase = len(rows)
-    
-    for index,row in rows.iterrows():
-        total_profit += float(row['total_profit'])
+    # print(total_purchase)
+    # for index,row in rows.iterrows():
+    #     total_profit += float(row['total_profit'])
+
+    for row in rows:
+        total_profit += float(row.total_profit)
     
     total_profit = min(1.0,total_profit)
 
-    df = pd.read_csv('customer.csv')
-    row = df.loc[df['id']==uid]
-    print(row)
-    joiningDate = row['date'].values[0]
-    unsuccessfulDeals = row['unsuccessful_deals'].values[0]
+    # row = db.session.query(Customer).filter_by(id)
+    # print(row)
+    row = Customer.query.get(uid)
+    # # df = pd.read_csv('customer.csv')
+    # # row = df.loc[df['id']==uid]
+    # print(row)
+    joiningDate = row.date
+    unsuccessfulDeals = int(row.unsuccessful_deals)
+    # # joiningDate = row['date'].values[0]
+    # # unsuccessfulDeals = row['unsuccessful_deals'].values[0]
 
     date_obj = datetime.datetime.strptime(joiningDate, '%d-%m-%y').date()
     delta = datetime.date.today() - date_obj
@@ -145,12 +159,13 @@ def getDiscount():
     if total_purchase>0:
         user_importance = unsuccessfulDeals/(total_purchase+unsuccessfulDeals)
 
-    print(total_purchase,user_importance,total_days,frquency_of_purchases,total_profit)
+    # print(total_purchase,user_importance,total_days,frquency_of_purchases,total_profit)
     discount = {"High":0.3,"Medimum":0.2,"Low":0.1}
-    # label = get_label(50, 0.9, 400, 0.1, 0)
-    # print(label)
+    label = get_label(50, 0.9, 400, 0.1, 0)
+    # # print(label)
     label = get_label(total_purchase, user_importance, total_days, frquency_of_purchases, total_profit)
     return jsonify({"discount":discount[label]})
+    # return jsonify({"no":"no"})
 
 @app.route('/data',methods=['POST'])
 def postData():
@@ -164,18 +179,32 @@ def postOrder():
     
     response =  request.get_json()
     # create random user id 
-    user_id = str(uuid.uuid1())
+    # user_id = str(uuid.uuid1())
     # create order id
     order_id = str(uuid.uuid1())
     products = response['data']
+    customer_id = response['userId']
+    date_of_order = str(datetime.date.today())
+    netDiscountReceived = response['netDiscountReceived']
+    total_price = 0
     for product in products:
-        order = OrderItems(order_id,user_id,product[0],product[1],product[2])
-        db.session.add(order)
-        db.session.commit()
+        total_price += int(product[1])
+    selling_price = total_price-netDiscountReceived
+    total_profit = round(random.uniform(0,0.8),2)
+
+    # for product in products:
+    #     order = OrderItems(order_id,user_id,product[0],product[1],product[2])
+    #     db.session.add(order)
+    #     db.session.commit()
     # postOrder(response['text'])
-    items = db.session.query(OrderItems).all()
-    for item in items:
-        print(item.order_id,item.user_id,item.product,item.price,item.quantity)
+
+    order = OrderItems(order_id,customer_id,selling_price,date_of_order,total_profit)
+    db.session.add(order)
+    db.session.commit()
+    print(order)
+    # items = db.session.query(OrderItems).all()
+    # for item in items:
+    #     print(item.order_id,item.user_id,item.product,item.price,item.quantity)
 
     return jsonify({"success":1})
     

@@ -42,13 +42,6 @@ class OrderItems(db.Model):
     selling_price = db.Column(db.Integer)
 
 
-#    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#    order_id = db.Column(db.String(200))
-#    user_id = db.Column(db.String(200))
-#    product = db.Column(db.String(50))
-#    price = db.Column(db.Integer)
-#    quantity = db.Column(db.Integer)
-
     def __init__(self, order_id, user_id, price, date_of_order, total_profit):
         self.customer_id = user_id
         self.total_profit = total_profit
@@ -58,6 +51,20 @@ class OrderItems(db.Model):
         # self.quantity = quantity
         self.order_id = order_id
    
+
+class Products(db.Model):
+    id = db.Column(db.String(200),primary_key=True)
+    name = db.Column(db.String(200))
+    price = db.Column(db.Integer)
+    qty = db.Column(db.Integer)
+    maxDiscount = db.Column(db.Float)
+
+    def __init__(self,id,name,price,qty,maxDiscount):
+        self.id = id
+        self.name = name
+        self.price = price
+        self.qty = qty
+        self.maxDiscount = maxDiscount
 
 CORS(app)
 
@@ -98,11 +105,10 @@ def login():
     data = request.get_json() 
     print(request.get_json())
     email = data["email"]
-    df = pd.read_csv('customer.csv')
-    row = df.loc[df['email']==email]
-    if(len(row)>0):
-        userId=row['id'].values[0]
-        return jsonify({"success":1,"userId":int(userId)})
+    customer = db.session.query(Customer).filter_by(email=email).all()
+    
+    if(len(customer)>0):
+        return jsonify({"success":1,"userId":int(customer[0].id)})
     
     return jsonify({"success":0})
 
@@ -115,8 +121,6 @@ def getDiscount():
     # total_days = 400
     # frquency_of_purchases = 0.1
     # total_profit = 0.1
-
-    # get user id from query params
     args = request.args
     
     uid = args.get("uid")
@@ -124,15 +128,7 @@ def getDiscount():
     # uid = 565
     total_profit=0
     rows= db.session.query(OrderItems).filter_by(customer_id=uid).all()
-    # rows = OrderItems.query.filter_by(customer_id=1).all()
-
-    # df = pd.read_csv('order_data.csv')
-    # rows = df.loc[df['customer_id']==uid]
-    # print(rows)
     total_purchase = len(rows)
-    # print(total_purchase)
-    # for index,row in rows.iterrows():
-    #     total_profit += float(row['total_profit'])
 
     for row in rows:
         total_profit += float(row.total_profit)
@@ -142,13 +138,8 @@ def getDiscount():
     # row = db.session.query(Customer).filter_by(id)
     # print(row)
     row = Customer.query.get(uid)
-    # # df = pd.read_csv('customer.csv')
-    # # row = df.loc[df['id']==uid]
-    # print(row)
     joiningDate = row.date
     unsuccessfulDeals = int(row.unsuccessful_deals)
-    # # joiningDate = row['date'].values[0]
-    # # unsuccessfulDeals = row['unsuccessful_deals'].values[0]
 
     date_obj = datetime.datetime.strptime(joiningDate, '%d-%m-%y').date()
     delta = datetime.date.today() - date_obj
@@ -160,11 +151,11 @@ def getDiscount():
         user_importance = unsuccessfulDeals/(total_purchase+unsuccessfulDeals)
 
     # print(total_purchase,user_importance,total_days,frquency_of_purchases,total_profit)
-    discount = {"High":0.3,"Medimum":0.2,"Low":0.1}
+    # discount = {"High":0.3,"Medimum":0.2,"Low":0.1}
     label = get_label(50, 0.9, 400, 0.1, 0)
     # # print(label)
     label = get_label(total_purchase, user_importance, total_days, frquency_of_purchases, total_profit)
-    return jsonify({"discount":discount[label]})
+    return jsonify({"discount":label[0]})
     # return jsonify({"no":"no"})
 
 @app.route('/data',methods=['POST'])
@@ -178,9 +169,6 @@ def postData():
 def postOrder():
     
     response =  request.get_json()
-    # create random user id 
-    # user_id = str(uuid.uuid1())
-    # create order id
     order_id = str(uuid.uuid1())
     products = response['data']
     customer_id = response['userId']
@@ -192,62 +180,61 @@ def postOrder():
     selling_price = total_price-netDiscountReceived
     total_profit = round(random.uniform(0,0.8),2)
 
-    # for product in products:
-    #     order = OrderItems(order_id,user_id,product[0],product[1],product[2])
-    #     db.session.add(order)
-    #     db.session.commit()
-    # postOrder(response['text'])
 
     order = OrderItems(order_id,customer_id,selling_price,date_of_order,total_profit)
     db.session.add(order)
     db.session.commit()
     print(order)
-    # items = db.session.query(OrderItems).all()
-    # for item in items:
-    #     print(item.order_id,item.user_id,item.product,item.price,item.quantity)
 
     return jsonify({"success":1})
     
 @app.route('/products')
 def getProducts():
     
-
-    return jsonify({
-            "tomatoes":{"price":500,"qty":400},
-            "potatoes":{"price":400,"qty":300},
-            "apples":{"price":300,"qty":100},
-            "banannas":{"price":100,"qty":200},
-            "grapes":{"price":100,"qty":200},
-            "onions":{"price":200,"qty":100},
-            "chicken":{"price":200,"qty":100},
-            "butter":{"price":200,"qty":100},
-            "yogurt":{"price":400,"qty":100},
-            "brown bread":{"price":300,"qty":100},
-            "flour":{"price":200,"qty":100},
-            "sugar":{"price":200,"qty":100},
-            "coffee":{"price":200,"qty":100},
-            "beef":{"price":300,"qty":100},
-            "beries":{"price":200,"qty":100},
-            "fish":{"price":200,"qty":100},
-            "pasta":{"price":200,"qty":100},
-            "sausage":{"price":100,"qty":100},
-            "dessert":{"price":200,"qty":100},
-            "cream cheese":{"price":200,"qty":100},
-            "eggs":{"price":200,"qty":100},
-            "salt":{"price":400,"qty":100},
-            "oil":{"price":200,"qty":100},
-            "water":{"price":200,"qty":100},
-            "coffee":{"price":200,"qty":100},
-            "cabbage":{"price":300,"qty":100},
-            "mushroom":{"price":200,"qty":100},
-            "broccoli":{"price":700,"qty":100},
-            "peas":{"price":800,"qty":100}
-        })
+    products = {}
+    rows  = db.session.query(Products).all()
+    for row in rows:
+        products[row.name] = {"price":row.price,"qty":row.qty,"maxDiscount":row.maxDiscount}
+    # print(products)
+    return jsonify(products)
+    # return jsonify({
+    #         "tomatoes":{"price":95,"qty":400,"maxDiscount":0.1},
+    #         "potatoes":{"price":90,"qty":300,"maxDiscount":0.05},
+    #         "apples":{"price":300,"qty":100,"maxDiscount":0.02},
+    #         "banannas":{"price":400,"qty":200,"maxDiscount":0.1},
+    #         "grapes":{"price":100,"qty":200,"maxDiscount":0.2},
+    #         "onions":{"price":90,"qty":100,"maxDiscount":0.3},
+    #         "chicken":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "butter":{"price":200,"qty":100,"maxDiscount":0.3},
+    #         "yogurt":{"price":400,"qty":100,"maxDiscount":0.2},
+    #         "brown bread":{"price":300,"qty":100,"maxDiscount":0.2},
+    #         "flour":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "sugar":{"price":135,"qty":100,"maxDiscount":0.2},
+    #         "coffee":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "beef":{"price":300,"qty":100,"maxDiscount":0.2},
+    #         "beries":{"price":200,"qty":100,"maxDiscount":0.5},
+    #         "fish":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "pasta":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "sausage":{"price":100,"qty":100,"maxDiscount":0.2},
+    #         "dessert":{"price":200,"qty":100,"maxDiscount":0.5},
+    #         "cream cheese":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "eggs":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "salt":{"price":400,"qty":100,"maxDiscount":0.4},
+    #         "oil":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "water":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "coffee":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "cabbage":{"price":300,"qty":100,"maxDiscount":0.2},
+    #         "mushroom":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "broccoli":{"price":700,"qty":100,"maxDiscount":0.2},
+    #         "peas":{"price":800,"qty":100,"maxDiscount":0.2}
+    #     })
 
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+    
+        
         # items = db.session.query(Customer).all()
         # for item in items:
         #     print(item.id,item.first_name,item.last_name)

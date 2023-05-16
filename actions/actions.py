@@ -149,9 +149,9 @@ class ActionNegotiateOverall(Action):
             mid = int((canOffer+requestedPrice)/2)
             diff = canOffer-mid
             newOffer = canOffer+diff
-            if newOffer>=tot:
-                newOffer = int((canOffer+tot)/2)
-            counterOffer = tot-newOffer
+            if newOffer>=(tot-netDiscountReceived):
+                newOffer = int((canOffer+(tot-netDiscountReceived))/2)
+            counterOffer = tot-netDiscountReceived-newOffer
             newOffer = str(newOffer)
             # offer rejected
             dispatcher.utter_message(text="Sorry, That's too low. I would be making no profit from this deal.")
@@ -264,7 +264,19 @@ def adjustDiscounts(products,discount,netDiscountReceived):
     totDiscount=0
     for p in products:
         totalPrice = p[1]
-        totDiscount+=(totalPrice*discount)
+        maxDiscountPerProduct = p[3]
+        discountOnUserType = maxDiscountPerProduct 
+        if discount == "M":
+
+            discountOnUserType = (discountOnUserType*100)/2
+            discountOnUserType/=100
+
+        elif discount == "L":
+            discountOnUserType = (discountOnUserType*100)/4
+            discountOnUserType/=100
+
+        print("discountOnUserType: ",discountOnUserType)
+        totDiscount+=(totalPrice*discountOnUserType)
     
     if netDiscountReceived>totDiscount:
         netDiscountReceived=totDiscount
@@ -326,7 +338,8 @@ class ActionProductQuery(Action):
                     # product is available with required quantity
                     # calculate total price and append in available array
                     totalPrice = estoreProducts[name]["price"]*qty
-                    available.append([name,totalPrice,qty])
+                    maxDiscount = estoreProducts[name]["maxDiscount"]
+                    available.append([name,totalPrice,qty,maxDiscount])
             else:
                 # product is not available
                 unavailable.append(name)

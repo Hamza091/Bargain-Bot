@@ -105,8 +105,7 @@ nlu:
     - I have [100](quantity) only
     - I will place order, if you make it [400](quantity)
     - That's too much please make it [400](quantity)
-    - I would be happy if you make it [500](quantity)
-    
+    - I would be happy if you make it [500](quantity) 
 
 - intent: negotiate
   examples: |   

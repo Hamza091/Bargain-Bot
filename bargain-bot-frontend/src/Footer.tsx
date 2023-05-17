@@ -15,7 +15,7 @@ export const Footer = () => {
     console.log(text);
     let data = {
       sender: userId,
-      message: text,
+      message: text 
     };
 
     dispatch(SET_RESPONSE(data));
@@ -30,6 +30,7 @@ export const Footer = () => {
               SET_RESPONSE({
                 text: val.text,
                 recipient_id: val.recipient,
+
               })
             );
             console.log(val.text);

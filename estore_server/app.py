@@ -58,7 +58,7 @@ class Products(db.Model):
     price = db.Column(db.Integer)
     qty = db.Column(db.Integer)
     maxDiscount = db.Column(db.Float)
-    
+
     def __init__(self,id,name,price,qty,maxDiscount):
         self.id = id
         self.name = name
@@ -100,11 +100,18 @@ def get_label(total_purchase, user_importance, total_days, frquency_of_purchases
     result = model.predict(data)
     return labels[result[0]]
 
+enableCounterOffer = None
+@app.route('/negoMode',methods=['GET'])
+def negoMode():
+    return jsonify({"enableCounterOffer":enableCounterOffer})
+
 @app.route('/login',methods=['POST'])
 def login():
+    global enableCounterOffer
     data = request.get_json() 
     print(request.get_json())
     email = data["email"]
+    enableCounterOffer = data["enableCounterOffer"]
     customer = db.session.query(Customer).filter_by(email=email).all()
     
     if(len(customer)>0):

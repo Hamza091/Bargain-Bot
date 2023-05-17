@@ -40,6 +40,8 @@ const LoginPage = () => {
             .post("http://localhost:5000/login", {
               email: email,
               password: password,
+              enableCounterOffer: true
+              
             })
             .then((result) => {
               if (result.data.success === 1) {

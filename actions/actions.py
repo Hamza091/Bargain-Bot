@@ -189,9 +189,16 @@ class ActionNegotiateOverall(Action):
         netDiscount = tracker.get_slot("netDiscount")
         netDiscountReceived = tracker.get_slot("netDiscountReceived")
         cart = tracker.get_slot("requested_products")
+        data = requests.get("http://localhost:5000/negoMode")
+        print(data)
+        data = data.json()
+        print(data["enableCounterOffer"])
+        if(data["enableCounterOffer"]==True):
+            nego = NegotiationByCounterOffers()
+        else:
+            nego = NegotiationByFinalOffer()
 
-        # nego = NegotiationByFinalOffer()
-        nego = NegotiationByCounterOffers()
+
         counterOffer,netDiscountReceived,netDiscount = nego.negotiate(dispatcher,requestedPrice,netDiscount,netDiscountReceived,cart)
         return [SlotSet("counterOffer",counterOffer),SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
 

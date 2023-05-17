@@ -178,7 +178,7 @@ class ActionNegotiateOverall(Action):
         entities = tracker.latest_message['entities']
         for entity in entities:
             if entity['entity']=='quantity':
-                return int(entity['value'])
+                return float(entity['value'])
         return 0
 
     def run(self, dispatcher: CollectingDispatcher,

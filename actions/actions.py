@@ -105,6 +105,69 @@ class ActionUpdateCart(Action):
         dispatcher.utter_message(text="Your cart has been updated..")
         return [SlotSet("requested_products", newCart),SlotSet("netDiscount", netDiscount),SlotSet("netDiscountReceived",netDiscountReceived)]
 
+class NegotiationByCounterOffers():
+
+    def negotiate(self,dispatcher,requestedPrice,netDiscount,netDiscountReceived,cart):
+        #calculate total amount
+        tot=0
+        for item in cart:
+            tot+=item[1]
+
+        requestedDiscount = tot-netDiscountReceived-requestedPrice
+        counterOffer=None
+        if requestedDiscount<=netDiscount:
+            # offer accepted
+            netDiscountReceived+=requestedDiscount
+            netDiscount-=requestedDiscount
+            
+            
+            # price after discount
+            tot-=netDiscountReceived
+            dispatcher.utter_message(text="Offer Accepted. Your total bill after discount would be "+str(round(tot,2)))
+
+        else:
+            canOffer = tot-netDiscount
+            mid = int((canOffer+requestedPrice)/2)
+            diff = canOffer-mid
+            newOffer = canOffer+diff
+            if newOffer>=(tot-netDiscountReceived):
+                newOffer = int((canOffer+(tot-netDiscountReceived))/2)
+            counterOffer = tot-netDiscountReceived-newOffer
+            newOffer = str(newOffer)
+            # offer rejected
+            dispatcher.utter_message(text="Sorry, That's too low. I would be making no profit from this deal.")
+            dispatcher.utter_message(text="How about "+newOffer+"?")
+       
+        return counterOffer,netDiscountReceived,netDiscount
+
+class NegotiationByFinalOffer():
+    
+    def negotiate(self,dispatcher,requestedPrice,netDiscount,netDiscountReceived,cart):
+
+        #calculate total amount
+        tot=0
+        for item in cart:
+            tot+=item[1]
+
+        requestedDiscount = tot-netDiscountReceived-requestedPrice
+
+        if requestedDiscount<=netDiscount:
+            # offer accepted
+            netDiscountReceived+=requestedDiscount
+            netDiscount-=requestedDiscount
+            
+            
+            # price after discount
+            tot-=netDiscountReceived
+            dispatcher.utter_message(text="Offer Accepted. Your total bill after discount would be "+str(tot))
+
+        else:
+            # offer rejected
+            dispatcher.utter_message(text="Sorry, That's too low. I would be making no profit from this deal. ")
+
+       
+        return None,netDiscountReceived,netDiscount
+
 
 class ActionNegotiateOverall(Action):
 
@@ -127,37 +190,9 @@ class ActionNegotiateOverall(Action):
         netDiscountReceived = tracker.get_slot("netDiscountReceived")
         cart = tracker.get_slot("requested_products")
 
-        #calculate total amount
-        tot=0
-        for item in cart:
-            tot+=item[1]
-
-        requestedDiscount = tot-netDiscountReceived-requestedPrice
-        counterOffer=None
-        if requestedDiscount<=netDiscount:
-            # offer accepted
-            netDiscountReceived+=requestedDiscount
-            netDiscount-=requestedDiscount
-            
-            
-            # price after discount
-            tot-=netDiscountReceived
-            dispatcher.utter_message(text="Offer Accepted. Your total bill after discount would be "+str(tot))
-
-        else:
-            canOffer = tot-netDiscount
-            mid = int((canOffer+requestedPrice)/2)
-            diff = canOffer-mid
-            newOffer = canOffer+diff
-            if newOffer>=(tot-netDiscountReceived):
-                newOffer = int((canOffer+(tot-netDiscountReceived))/2)
-            counterOffer = tot-netDiscountReceived-newOffer
-            newOffer = str(newOffer)
-            # offer rejected
-            dispatcher.utter_message(text="Sorry, That's too low. I would be making no profit from this deal.")
-            dispatcher.utter_message(text="How about "+newOffer+"?")
-        print(netDiscount)
-        print(netDiscountReceived)
+        # nego = NegotiationByFinalOffer()
+        nego = NegotiationByCounterOffers()
+        counterOffer,netDiscountReceived,netDiscount = nego.negotiate(dispatcher,requestedPrice,netDiscount,netDiscountReceived,cart)
         return [SlotSet("counterOffer",counterOffer),SlotSet("netDiscountReceived",netDiscountReceived),SlotSet("netDiscount",netDiscount)]
 
 
@@ -303,6 +338,7 @@ class ActionProductQuery(Action):
         for entity in entities:    
             if entity['entity']=='quantity':
                 quantities.append(entity['value'])
+                print(entity['value'])
             else:
                 products.append(entity['value'])
 
@@ -312,11 +348,13 @@ class ActionProductQuery(Action):
         print("Length of products: ",len(products))
         for i in range(0,len(products)):
             if j<len(quantities):
-                qty = re.sub(r"\D","",quantities[j])
+                print("original string",quantities[j])
+                qty = re.sub(r"[a-z]","",quantities[j])
+                print("from regex: ",qty)
                 j+=1
             else:
                 qty = "1"
-            cart.append([products[i],int(qty)])
+            cart.append([products[i],float(qty)])
 
          
         return cart

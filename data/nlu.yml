@@ -157,6 +157,9 @@ nlu:
     - I want [3kg](quantity) of [mangoes](product)
     - How much for [10kg](quantity) of [onions](product)?
     - Do you have [2kg](quantity) [potatoes](product)?
+    - I want [3.5kg](quantity) of [mangoes](product)
+    - How much for [10.4kg](quantity) of [onions](product)?
+    - Do you have [2.7kg](quantity) [potatoes](product)?
     - [peaches](product)
     - [blue band](product)
     - [lemons](product)
@@ -173,6 +176,15 @@ nlu:
     - [7kg](quantity)
     - [8kg](quantity)
     - [9kg](quantity)
+    - [1.3kg](quantity)
+    - [2.5kg](quantity)
+    - [3.7kg](quantity)
+    - [4.8kg](quantity)
+    - [5.1kg](quantity)
+    - [6.8kg](quantity)
+    - [7.4kg](quantity)
+    - [8.3kg](quantity)
+    - [9.2kg](quantity)
     - [0123456789](quantity)
 
 

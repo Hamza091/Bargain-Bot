@@ -4,7 +4,7 @@ const Shop = () => {
   return (
     <div className="w-full h-auto p-5">
       <h2 className="text-[28px] italic font-semibold">Grosseries</h2>
-      <div className="w-full h-auto grid grid-cols-6 mx-auto">
+      <div className="w-full h-auto grid grid-cols-4 mx-auto">
         {product.map((val: any, key: number) => (
           <div
             className="w-auto h-[450px] mx-4 border my-[25px] rounded-md shadow-xl bg-white cursor-pointer"

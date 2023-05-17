@@ -58,7 +58,7 @@ class Products(db.Model):
     price = db.Column(db.Integer)
     qty = db.Column(db.Integer)
     maxDiscount = db.Column(db.Float)
-
+    
     def __init__(self,id,name,price,qty,maxDiscount):
         self.id = id
         self.name = name
@@ -198,13 +198,13 @@ def getProducts():
     # print(products)
     return jsonify(products)
     # return jsonify({
-    #         "tomatoes":{"price":95,"qty":400,"maxDiscount":0.1},
-    #         "potatoes":{"price":90,"qty":300,"maxDiscount":0.05},
-    #         "apples":{"price":300,"qty":100,"maxDiscount":0.02},
-    #         "banannas":{"price":400,"qty":200,"maxDiscount":0.1},
-    #         "grapes":{"price":100,"qty":200,"maxDiscount":0.2},
-    #         "onions":{"price":90,"qty":100,"maxDiscount":0.3},
-    #         "chicken":{"price":200,"qty":100,"maxDiscount":0.2},
+    #         "tomatoes":{"price":95,"qty":400,"maxDiscount":0.28},
+    #         "potatoes":{"price":90,"qty":300,"maxDiscount":0.15},
+    #         "apples":{"price":300,"qty":100,"maxDiscount":0.27},
+    #         "banannas":{"price":400,"qty":200,"maxDiscount":0.13},
+    #         "grapes":{"price":100,"qty":200,"maxDiscount":0.14},
+    #         "onions":{"price":90,"qty":100,"maxDiscount":0.29},
+    #         "chicken":{"price":200,"qty":100,"maxDiscount":0.29},
     #         "butter":{"price":200,"qty":100,"maxDiscount":0.3},
     #         "yogurt":{"price":400,"qty":100,"maxDiscount":0.2},
     #         "brown bread":{"price":300,"qty":100,"maxDiscount":0.2},
@@ -231,9 +231,17 @@ def getProducts():
 
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    
+    # with app.app_context():
+    #     items = db.session.query(Products).all()
+    #     for item in items:
+    #         # print(item.id,item.name,item.qty,item.price,item.maxDiscount)
+    #         item.maxDiscount = round(random.uniform(0.1,0.3),2)
+    #         db.session.commit()
+    #     # db.create_all()
+    #     items = db.session.query(Products).all()
+    #     for item in items:
+    #         print(item.id,item.name,item.qty,item.price,item.maxDiscount)
+
         
         # items = db.session.query(Customer).all()
         # for item in items:

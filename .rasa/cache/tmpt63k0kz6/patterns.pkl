@@ -1,0 +1,6 @@
+[
+  {
+    "name": "product",
+    "pattern": "(\\bdessert\\b)"
+  }
+]
